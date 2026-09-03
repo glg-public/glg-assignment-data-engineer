@@ -112,7 +112,11 @@ docker compose run --rm generate-performance-data
 
 Generated profile IDs start with `PERF-`. Running the command again replaces prior generated rows.
 
-## 7. Reset Everything
+## 7. Complete The Case Study
+
+Follow the Requested Changes in [`CANDIDATE_INSTRUCTIONS.md`](CANDIDATE_INSTRUCTIONS.md) to complete the case study. That document also explains validation, scope, submission, and support expectations.
+
+## 8. Reset Everything
 
 ```console
 docker compose down --volumes
@@ -130,5 +134,3 @@ The first command permanently removes local case-study database and Airflow stat
 - Use the Airflow task log to investigate pipeline failures.
 - Use `docker compose logs web` to inspect Flask startup failures.
 - Use `docker compose logs airflow-scheduler` to inspect DAG scheduling failures.
-
-For the assignment requirements and submission guidance, see `CANDIDATE_INSTRUCTIONS.md`.
