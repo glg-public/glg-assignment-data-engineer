@@ -116,15 +116,6 @@ Generated profile IDs start with `PERF-`. Running the command again replaces pri
 
 Follow the Requested Changes in [`CANDIDATE_INSTRUCTIONS.md`](CANDIDATE_INSTRUCTIONS.md) to complete the case study. That document also explains validation, scope, submission, and support expectations.
 
-## 8. Reset Everything
-
-```console
-docker compose down --volumes
-docker compose up --build
-```
-
-The first command permanently removes local case-study database and Airflow state.
-
 ## Troubleshooting
 
 - Confirm Docker Desktop is running before invoking Docker Compose.
@@ -134,3 +125,12 @@ The first command permanently removes local case-study database and Airflow stat
 - Use the Airflow task log to investigate pipeline failures.
 - Use `docker compose logs web` to inspect Flask startup failures.
 - Use `docker compose logs airflow-scheduler` to inspect DAG scheduling failures.
+
+### Reset Local State
+
+Only reset if you need a clean database and Airflow environment while troubleshooting. This permanently removes local pipeline results, task history, and database state, but does not delete your code changes.
+
+```console
+docker compose down --volumes
+docker compose up --build
+```
