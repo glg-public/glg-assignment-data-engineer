@@ -12,6 +12,10 @@ Later Snapshots can show that a profile has changed company, job title, or depar
 CSV Snapshot -> Airflow -> PostgreSQL -> Flask
 ```
 
+[![Professional profile pipeline blueprint](assets/pipeline-blueprint.svg)](assets/pipeline-blueprint.svg)
+
+The numbered markers identify Requested Change areas. They do not identify defect locations; see `CANDIDATE_INSTRUCTIONS.md` for the assignment contract.
+
 ## 0. Prerequisites
 
 - Git

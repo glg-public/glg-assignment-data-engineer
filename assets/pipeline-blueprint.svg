@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="840" viewBox="0 0 1440 840" role="img" aria-labelledby="title description">
+  <title id="title">Professional profile pipeline blueprint</title>
+  <description id="description">Blueprint diagram showing CSV snapshots flowing through Airflow and Python ETL into PostgreSQL raw, operations, and mart schemas, then to a Flask application. Numbered markers identify requested-change areas without identifying defect locations.</description>
+  <defs>
+    <pattern id="minorGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0H0V20" fill="none" stroke="#2d6086" stroke-width="1" opacity=".22"/>
+    </pattern>
+    <pattern id="majorGrid" width="100" height="100" patternUnits="userSpaceOnUse">
+      <rect width="100" height="100" fill="url(#minorGrid)"/>
+      <path d="M100 0H0V100" fill="none" stroke="#4a80a8" stroke-width="1.5" opacity=".28"/>
+    </pattern>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M1 1l10 5-10 5z" fill="#65d5ff"/>
+    </marker>
+    <style>
+      .sans { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+      .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+      .label { fill: #d9f3ff; font-size: 22px; font-weight: 700; letter-spacing: .06em; }
+      .eyebrow { fill: #7edcff; font-size: 13px; font-weight: 700; letter-spacing: .18em; }
+      .detail { fill: #a9d2e8; font-size: 15px; }
+      .tiny { fill: #85b8d1; font-size: 12px; letter-spacing: .04em; }
+      .box { fill: #0c3350; stroke: #7edcff; stroke-width: 2; }
+      .box-alt { fill: #102b45; stroke: #52a8d5; stroke-width: 1.5; }
+      .line { fill: none; stroke: #65d5ff; stroke-width: 3; marker-end: url(#arrow); }
+      .dash { fill: none; stroke: #52a8d5; stroke-width: 2; stroke-dasharray: 7 7; }
+      .dimension { fill: none; stroke: #4e94b9; stroke-width: 1; }
+      .marker { fill: #ffbd59; stroke: #fff0c2; stroke-width: 2; filter: url(#glow); }
+      .marker-text { fill: #09263c; font-size: 15px; font-weight: 800; text-anchor: middle; dominant-baseline: central; }
+    </style>
+  </defs>
+
+  <rect width="1440" height="840" fill="#082a44"/>
+  <rect width="1440" height="840" fill="url(#majorGrid)"/>
+  <path d="M34 34h55M34 34v55M1406 34h-55M1406 34v55M34 806h55M34 806v-55M1406 806h-55M1406 806v-55" class="dimension" stroke-width="3"/>
+
+  <text x="70" y="78" class="sans eyebrow">SYSTEM DRAWING / DE-CASE-001</text>
+  <text x="70" y="118" class="sans" fill="#f1fbff" font-size="34" font-weight="750">PROFESSIONAL PROFILE PIPELINE</text>
+  <text x="70" y="147" class="mono detail">periodic snapshots / ordered ingestion / historical modeling / queryable output</text>
+  <text x="1368" y="78" class="mono tiny" text-anchor="end">REV 01</text>
+  <text x="1368" y="101" class="mono tiny" text-anchor="end">NOT TO SCALE</text>
+
+  <!-- Source files -->
+  <g transform="translate(70 245)">
+    <rect width="250" height="250" rx="8" class="box"/>
+    <path d="M28 46h194M28 188h194" class="dimension"/>
+    <text x="28" y="31" class="sans eyebrow">SOURCE / FULL VIEW</text>
+    <text x="28" y="82" class="sans label">CSV SNAPSHOTS</text>
+    <g transform="translate(28 106)">
+      <path d="M0 0h145l28 28v58H0z" class="box-alt"/>
+      <path d="M145 0v28h28" class="dimension"/>
+      <text x="14" y="33" class="mono detail">profiles_YYYY</text>
+      <text x="14" y="55" class="mono detail">-MM-DD.csv</text>
+      <text x="14" y="76" class="mono tiny">one row / profile</text>
+    </g>
+    <text x="28" y="218" class="mono tiny">profile_id is stable</text>
+    <text x="28" y="239" class="mono tiny">date comes from filename</text>
+  </g>
+
+  <!-- Orchestration -->
+  <g transform="translate(405 245)">
+    <rect width="250" height="250" rx="8" class="box"/>
+    <path d="M28 46h194M28 188h194" class="dimension"/>
+    <text x="28" y="31" class="sans eyebrow">ORCHESTRATION</text>
+    <text x="28" y="82" class="sans label">AIRFLOW DAG</text>
+    <text x="28" y="115" class="mono detail">profile_snapshot</text>
+    <g transform="translate(28 142)">
+      <circle cx="10" cy="10" r="8" fill="none" stroke="#7edcff" stroke-width="2"/>
+      <path d="M18 10h48M74 10h48M130 10h48" class="dimension" stroke-width="2"/>
+      <circle cx="66" cy="10" r="8" fill="none" stroke="#7edcff" stroke-width="2"/>
+      <circle cx="122" cy="10" r="8" fill="none" stroke="#7edcff" stroke-width="2"/>
+      <circle cx="178" cy="10" r="8" fill="none" stroke="#7edcff" stroke-width="2"/>
+    </g>
+    <text x="28" y="218" class="mono tiny">schedule / retries / logs</text>
+    <text x="28" y="239" class="mono tiny">oldest pending file first</text>
+  </g>
+
+  <!-- ETL -->
+  <g transform="translate(740 245)">
+    <rect width="250" height="250" rx="8" class="box"/>
+    <path d="M28 46h194M28 188h194" class="dimension"/>
+    <text x="28" y="31" class="sans eyebrow">TRANSFORMATION</text>
+    <text x="28" y="82" class="sans label">PYTHON ETL</text>
+    <text x="28" y="116" class="mono detail">validate()</text>
+    <text x="28" y="143" class="mono detail">land_raw()</text>
+    <text x="28" y="170" class="mono detail">model_current()</text>
+    <text x="28" y="218" class="mono tiny">one transaction / snapshot</text>
+    <text x="28" y="239" class="mono tiny">checks block publication</text>
+  </g>
+
+  <!-- Flask -->
+  <g transform="translate(1075 245)">
+    <rect width="295" height="250" rx="8" class="box"/>
+    <path d="M28 46h239M28 188h239" class="dimension"/>
+    <text x="28" y="31" class="sans eyebrow">CONSUMER / READ ONLY</text>
+    <text x="28" y="82" class="sans label">FLASK UI</text>
+    <g transform="translate(28 105)">
+      <rect width="238" height="65" rx="4" class="box-alt"/>
+      <circle cx="15" cy="14" r="3" fill="#ffbd59"/>
+      <circle cx="26" cy="14" r="3" fill="#65d5ff"/>
+      <circle cx="37" cy="14" r="3" fill="#65d5ff"/>
+      <path d="M12 27h214M17 39h82M17 49h135" class="dimension"/>
+    </g>
+    <text x="28" y="218" class="mono tiny">profiles / companies</text>
+    <text x="28" y="239" class="mono tiny">search / profile history</text>
+  </g>
+
+  <!-- Flow connectors -->
+  <path d="M320 370h70" class="line"/>
+  <path d="M655 370h70" class="line"/>
+  <path d="M990 370h70" class="line"/>
+  <text x="355" y="350" class="mono tiny" text-anchor="middle">discover</text>
+  <text x="690" y="350" class="mono tiny" text-anchor="middle">execute</text>
+  <text x="1025" y="350" class="mono tiny" text-anchor="middle">serve</text>
+
+  <!-- PostgreSQL foundation -->
+  <g transform="translate(405 565)">
+    <rect width="965" height="145" rx="8" class="box"/>
+    <text x="28" y="31" class="sans eyebrow">POSTGRESQL / SYSTEM OF RECORD</text>
+    <g transform="translate(28 53)">
+      <rect width="255" height="65" rx="5" class="box-alt"/>
+      <text x="18" y="28" class="sans label" font-size="18">RAW</text>
+      <text x="18" y="50" class="mono tiny">immutable source rows</text>
+    </g>
+    <g transform="translate(350 53)">
+      <rect width="255" height="65" rx="5" class="box-alt"/>
+      <text x="18" y="28" class="sans label" font-size="18">OPS</text>
+      <text x="18" y="50" class="mono tiny">ingestion control state</text>
+    </g>
+    <g transform="translate(672 53)">
+      <rect width="265" height="65" rx="5" class="box-alt"/>
+      <text x="18" y="28" class="sans label" font-size="18">MART</text>
+      <text x="18" y="50" class="mono tiny">current + versioned profiles</text>
+    </g>
+  </g>
+  <path d="M865 495v55" class="line"/>
+  <path d="M1222 550v-40" class="dash"/>
+
+  <!-- Requested-change markers -->
+  <g transform="translate(625 245)"><circle r="16" class="marker"/><text class="sans marker-text">2</text></g>
+  <g transform="translate(1040 540)"><circle r="16" class="marker"/><text class="sans marker-text">3</text></g>
+  <g transform="translate(1218 565)"><circle r="16" class="marker"/><text class="sans marker-text">4</text></g>
+  <g transform="translate(1350 262)"><circle r="16" class="marker"/><text class="sans marker-text">5</text></g>
+
+  <!-- Legend -->
+  <g transform="translate(70 565)">
+    <rect width="250" height="200" rx="8" fill="#092f4b" stroke="#4e94b9" stroke-width="1.5"/>
+    <text x="22" y="32" class="sans eyebrow">DRAWING LEGEND</text>
+    <circle cx="34" cy="66" r="14" class="marker"/>
+    <text x="34" y="66" class="sans marker-text">#</text>
+    <text x="58" y="71" class="sans detail">Requested Change</text>
+    <path d="M22 100h34" class="line" marker-end="none"/>
+    <text x="66" y="105" class="sans detail">data / control flow</text>
+    <path d="M22 132h34" class="dash"/>
+    <text x="66" y="137" class="sans detail">read path</text>
+    <text x="22" y="171" class="mono tiny">RC1: repair six observed</text>
+    <text x="22" y="188" class="mono tiny">defects across the system</text>
+  </g>
+
+  <path d="M70 788h1300" class="dimension"/>
+  <text x="70" y="816" class="mono tiny">MARKERS SHOW FEATURE AREAS, NOT DEFECT LOCATIONS. SEE CANDIDATE_INSTRUCTIONS.md FOR THE WORK CONTRACT.</text>
+</svg>
