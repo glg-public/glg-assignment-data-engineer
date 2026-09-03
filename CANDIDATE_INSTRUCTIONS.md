@@ -2,13 +2,26 @@
 
 Read `README.md` first for the application overview, data semantics, setup, operation, and troubleshooting instructions.
 
-Your assignment is to implement the Requested Changes below. The existing application may contain defects that you will need to diagnose and repair while completing them.
+Your assignment is to implement the Requested Changes below.
 
 The repository may not initially behave exactly as documented. Use service and Airflow task logs when startup or output is unexpected.
 
 ## Requested Changes
 
-### 1. Process Available Snapshots
+### 1. Repair Known Defects
+
+Diagnose and repair these six observed problems:
+
+1. The Flask application is not available at the documented address after the stack starts.
+2. The `profile_snapshot` DAG fails when it attempts to read its configured source file.
+3. A profile explicitly marked inactive can remain in current-profile results and company headcount.
+4. Rerunning an already completed Snapshot can fail instead of completing safely.
+5. Company headcount can exceed the number of current active profiles belonging to that company.
+6. Snapshot processing can report success even when a data-quality check reports invalid output.
+
+Fix the underlying causes rather than suppressing symptoms or removing validation.
+
+### 2. Process Available Snapshots
 
 Alter the DAG so one run discovers and processes all unprocessed dated Snapshot files in chronological order.
 
@@ -16,7 +29,7 @@ Alter the DAG so one run discovers and processes all unprocessed dated Snapshot 
 - A failed file must remain retryable.
 - Files dated after a failed file must not be processed during that run.
 
-### 2. Preserve Profile History
+### 3. Preserve Profile History
 
 Evolve the current-state model into an SCD Type 2 profile-history model.
 
@@ -29,7 +42,7 @@ Evolve the current-state model into an SCD Type 2 profile-history model.
 
 Example: a change first seen in the `2026-02-01` Snapshot closes the old version with `valid_to = 2026-02-01` and starts the new version with `valid_from = 2026-02-01`.
 
-### 3. Optimize Profile Search
+### 4. Optimize Profile Search
 
 Improve the current-profile search query used by `/profiles` without changing its results or ordering.
 
@@ -37,7 +50,7 @@ You may rewrite SQL, add indexes, or alter the schema. Use PostgreSQL's executio
 
 Use the deterministic larger dataset described in `README.md` for query-plan analysis.
 
-### 4. Show Profile History
+### 5. Show Profile History
 
 Add a profile detail page at `/profiles/<profile_id>` and link profile-search results to it.
 
