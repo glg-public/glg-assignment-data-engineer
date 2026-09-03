@@ -212,7 +212,7 @@ def process_snapshot(path: Path) -> str:
                 if quality_result is None:
                     raise RuntimeError("Data-quality query returned no result")
                 if quality_result[0]:
-                    logger.error("Active modeled profiles have empty role fields")
+                    raise ValueError("Active modeled profiles have empty role fields")
 
                 cursor.execute(
                     "SELECT coalesce(sum(active_profiles), 0) FROM mart.company_headcount"
