@@ -40,8 +40,14 @@ def test_read_snapshot_rejects_duplicate_profile(tmp_path: Path):
         read_snapshot(path)
 
 
-def test_process_snapshot_loads_current_state(clean_database, first_snapshot):
+def test_process_snapshot_loads_current_state(clean_database, first_snapshot, caplog):
+    caplog.set_level("INFO", logger="profile_pipeline.snapshot")
     assert process_snapshot(first_snapshot) == "completed"
+
+    assert "Validated 20 rows: 20 active, 0 inactive" in caplog.text
+    assert "Loaded 20 raw rows" in caplog.text
+    assert "Data-quality checks passed: raw rows=20, modeled rows=20" in caplog.text
+    assert "Committed Snapshot 2026-01-15" in caplog.text
 
     with psycopg2.connect(database_url()) as connection:
         with connection.cursor() as cursor:

@@ -101,10 +101,12 @@ def read_snapshot(path: Path) -> list[ProfileRow]:
 
 def process_snapshot(path: Path) -> str:
     snapshot_date = parse_snapshot_date(path)
+    logger.info("Starting Snapshot %s from %s", snapshot_date, path)
 
     try:
         with psycopg2.connect(database_url()) as connection:
             with connection.cursor() as cursor:
+                logger.info("Waiting for ingestion lock")
                 cursor.execute(
                     "SELECT pg_advisory_xact_lock(hashtext('profile_snapshot_ingestion'))"
                 )
@@ -114,6 +116,7 @@ def process_snapshot(path: Path) -> str:
                 )
                 existing = cursor.fetchone()
                 if existing and existing[0] == "completed":
+                    logger.info("Skipping completed Snapshot %s", snapshot_date)
                     return "skipped"
 
                 cursor.execute(
@@ -127,6 +130,13 @@ def process_snapshot(path: Path) -> str:
                     )
 
                 rows = read_snapshot(path)
+                active_count = sum(row.is_active for row in rows)
+                logger.info(
+                    "Validated %s rows: %s active, %s inactive",
+                    len(rows),
+                    active_count,
+                    len(rows) - active_count,
+                )
 
                 cursor.execute(
                     "DELETE FROM ops.snapshot_ingestion WHERE snapshot_date = %s",
@@ -157,6 +167,7 @@ def process_snapshot(path: Path) -> str:
                     """,
                     raw_values,
                 )
+                logger.info("Loaded %s raw rows", len(rows))
 
                 execute_values(
                     cursor,
@@ -188,6 +199,7 @@ def process_snapshot(path: Path) -> str:
                         for row in rows
                     ],
                 )
+                logger.info("Published %s current profiles", len(rows))
 
                 cursor.execute(
                     """
@@ -220,6 +232,11 @@ def process_snapshot(path: Path) -> str:
                 modeled_count_result = cursor.fetchone()
                 if modeled_count_result is None or modeled_count_result[0] != len(rows):
                     raise ValueError("Modeled row count does not match the source Snapshot")
+                logger.info(
+                    "Data-quality checks passed: raw rows=%s, modeled rows=%s",
+                    raw_count_result[0],
+                    modeled_count_result[0],
+                )
 
                 cursor.execute(
                     """
@@ -229,8 +246,11 @@ def process_snapshot(path: Path) -> str:
                     """,
                     (snapshot_date, path.name, len(rows)),
                 )
+                logger.info("Marked Snapshot %s completed", snapshot_date)
+        logger.info("Committed Snapshot %s", snapshot_date)
         return "completed"
     except Exception as error:
+        logger.exception("Snapshot %s failed: %s", snapshot_date, error)
         try:
             _record_failure(snapshot_date, path.name, str(error))
         except Exception:

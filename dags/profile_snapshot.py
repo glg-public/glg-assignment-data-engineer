@@ -1,10 +1,14 @@
 import os
+import logging
 from datetime import datetime, timedelta
 from pathlib import Path
 
 from airflow.decorators import dag, task
 
 from profile_pipeline.snapshot import process_snapshot
+
+
+logger = logging.getLogger(__name__)
 
 
 @dag(
@@ -20,7 +24,10 @@ def profile_snapshot_dag():
     @task
     def load_configured_snapshot() -> str:
         path = Path(os.environ["SNAPSHOT_FILE"])
-        return process_snapshot(path)
+        logger.info("Configured Snapshot file: %s", path)
+        result = process_snapshot(path)
+        logger.info("Snapshot processing result: %s", result)
+        return result
 
     load_configured_snapshot()
 
