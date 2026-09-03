@@ -77,3 +77,5 @@ The first command permanently removes local case-study database and Airflow stat
 - Use `docker compose ps` to inspect service status.
 - Use the Airflow task log to investigate pipeline failures.
 - Use `docker compose logs web` to inspect Flask startup failures.
+
+For the assignment requirements and submission guidance, see `CANDIDATE_INSTRUCTIONS.md`.

@@ -39,9 +39,11 @@ CREATE TABLE mart.current_profile (
 
 CREATE VIEW mart.company_headcount AS
 SELECT
-    company_id,
-    company_name,
+    current_profile.company_id,
+    current_profile.company_name,
     count(*)::integer AS active_profiles
 FROM mart.current_profile
-WHERE is_active
-GROUP BY company_id, company_name;
+JOIN raw.profile_snapshot
+    ON raw.profile_snapshot.company_id = current_profile.company_id
+WHERE current_profile.is_active
+GROUP BY current_profile.company_id, current_profile.company_name;

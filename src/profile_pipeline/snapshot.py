@@ -46,11 +46,9 @@ def parse_snapshot_date(path: Path) -> date:
 
 def parse_boolean(value: str) -> bool:
     normalized = value.strip().lower()
-    if normalized in TRUE_VALUES:
-        return True
-    if normalized in FALSE_VALUES:
-        return False
-    raise ValueError(f"Unrecognized is_active value: {value!r}")
+    if normalized not in TRUE_VALUES | FALSE_VALUES:
+        raise ValueError(f"Unrecognized is_active value: {value!r}")
+    return bool(normalized)
 
 
 def read_snapshot(path: Path) -> list[ProfileRow]:
@@ -116,8 +114,7 @@ def process_snapshot(path: Path) -> str:
                 )
                 existing = cursor.fetchone()
                 if existing and existing[0] == "completed":
-                    logger.info("Skipping completed Snapshot %s", snapshot_date)
-                    return "skipped"
+                    logger.info("Reloading completed Snapshot %s", snapshot_date)
 
                 cursor.execute(
                     "SELECT max(snapshot_date) FROM ops.snapshot_ingestion WHERE status = 'completed'"
@@ -215,7 +212,19 @@ def process_snapshot(path: Path) -> str:
                 if quality_result is None:
                     raise RuntimeError("Data-quality query returned no result")
                 if quality_result[0]:
-                    raise ValueError("Active modeled profiles have empty role fields")
+                    logger.error("Active modeled profiles have empty role fields")
+
+                cursor.execute(
+                    "SELECT coalesce(sum(active_profiles), 0) FROM mart.company_headcount"
+                )
+                headcount_result = cursor.fetchone()
+                published_headcount = headcount_result[0] if headcount_result else 0
+                if published_headcount != active_count:
+                    logger.error(
+                        "Data-quality check failed: published headcount=%s, expected=%s",
+                        published_headcount,
+                        active_count,
+                    )
 
                 cursor.execute(
                     "SELECT count(*) FROM raw.profile_snapshot WHERE snapshot_date = %s",

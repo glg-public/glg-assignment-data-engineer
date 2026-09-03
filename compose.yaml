@@ -12,7 +12,7 @@ x-airflow-common: &airflow-common
     AIRFLOW__WEBSERVER__SECRET_KEY: local-case-study-key
     APP_DATABASE_URL: postgresql://case_study:case_study@postgres:5432/profile_data
     PYTHONPATH: /opt/project/src
-    SNAPSHOT_FILE: /opt/project/data/snapshots/profiles_2026-01-15.csv
+    SNAPSHOT_FILE: /opt/project/data/snapshot/profiles_2026-01-15.csv
   volumes:
     - ./dags:/opt/airflow/dags:ro
     - ./data:/opt/project/data:ro
@@ -97,7 +97,7 @@ services:
       APP_DATABASE_URL: postgresql://case_study:case_study@postgres:5432/profile_data
       SNAPSHOT_DIR: /app/data/snapshots
     ports:
-      - "5050:5000"
+      - "5051:5000"
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
       interval: 10s

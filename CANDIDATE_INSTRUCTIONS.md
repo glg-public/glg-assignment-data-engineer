@@ -34,13 +34,13 @@ Initial image downloads and Airflow setup may take several minutes. Check servic
 docker compose ps
 ```
 
-The application should provide:
+The documented application addresses are:
 
 - Flask: http://localhost:5050
 - Airflow: http://localhost:8080
 - Airflow login: `airflow` / `airflow`
 
-In Airflow, find the `profile_snapshot` DAG, unpause it, and trigger a run. Use task logs when a run fails or produces unexpected output.
+In Airflow, find the `profile_snapshot` DAG, unpause it, and trigger a run. Use service and task logs when startup or a run fails, or when output is unexpected. The repository may not initially behave exactly as documented.
 
 The Flask application contains:
 
