@@ -1,0 +1,154 @@
+# Candidate Instructions
+
+## Overview
+
+This repository contains a small professional-profile data application:
+
+```text
+CSV Snapshots -> Airflow ETL -> PostgreSQL -> Flask
+```
+
+A fictional vendor periodically provides a complete CSV **Snapshot** of its professional-profile data. Each file represents the vendor's view at a point in time.
+
+Your assignment is to extend the application so it processes multiple Snapshots, preserves profile history, improves a query, and displays that history. The existing application may contain defects that you will need to diagnose and repair while completing the requested changes.
+
+## Prerequisites
+
+- Git
+- Docker Desktop with Docker Compose
+- macOS on Apple Silicon or Intel, or Windows using WSL2
+
+You do not need host installations of Python, Airflow, or PostgreSQL.
+
+## Start The Application
+
+From the repository root:
+
+```console
+docker compose up --build
+```
+
+Initial image downloads and Airflow setup may take several minutes. Check service status with:
+
+```console
+docker compose ps
+```
+
+The application should provide:
+
+- Flask: http://localhost:5050
+- Airflow: http://localhost:8080
+- Airflow login: `airflow` / `airflow`
+
+In Airflow, find the `profile_snapshot` DAG, unpause it, and trigger a run. Use task logs when a run fails or produces unexpected output.
+
+The Flask application contains:
+
+- `/`: pipeline and Snapshot overview
+- `/profiles`: searchable current profiles
+- `/companies`: current company headcount
+
+## Source Data
+
+Snapshot files are in `data/snapshots/` and use names such as:
+
+```text
+profiles_2026-01-15.csv
+```
+
+Each `profile_id` is stable. A row includes the profile's display name, company, job title, department, and active state.
+
+When comparing Snapshots:
+
+- A new active profile starts its first version.
+- A company, job-title, or department change starts a new version.
+- A display-name-only change does not start a new version.
+- `is_active=false` closes the current version.
+- A later reactivation starts a new version.
+- Absence from one Snapshot does not imply inactivity.
+
+The incoming CSV files are Snapshots. The derived historical profile data is a Slowly Changing Dimension Type 2 model.
+
+## Requested Changes
+
+### 1. Process Available Snapshots
+
+Alter the DAG so one run discovers and processes all unprocessed dated Snapshot files in chronological order.
+
+- Completed files must be skipped safely on later runs.
+- A failed file must remain retryable.
+- Files dated after a failed file must not be processed during that run.
+
+### 2. Preserve Profile History
+
+Evolve the current-state model into an SCD Type 2 profile-history model.
+
+- Preserve changes to company, job title, and department.
+- Keep stable profile and company entities separate from versioned employment attributes.
+- Use inclusive `valid_from` and exclusive `valid_to` dates.
+- A current version has `valid_to = NULL`.
+- Each active profile has exactly one current version; inactive profiles have none.
+- Keep `mart.current_profile` available as the current-state interface used by existing application pages.
+
+Example: a change first seen in the `2026-02-01` Snapshot closes the old version with `valid_to = 2026-02-01` and starts the new version with `valid_from = 2026-02-01`.
+
+### 3. Optimize Profile Search
+
+Improve the current-profile search query used by `/profiles` without changing its results or ordering.
+
+You may rewrite SQL, add indexes, or alter the schema. Use PostgreSQL's execution plan to understand and demonstrate the improvement rather than relying only on elapsed time.
+
+Generate a deterministic larger dataset for query-plan analysis with:
+
+```console
+docker compose run --rm generate-performance-data
+```
+
+### 4. Show Profile History
+
+Add a profile detail page at `/profiles/<profile_id>` and link profile-search results to it.
+
+Display:
+
+- The profile's latest display name.
+- Company, job title, and department for each version.
+- The effective period for each version in chronological order.
+
+Inactive profiles should remain available through their history page even though they are excluded from current-profile search and company headcount.
+
+## Validation
+
+Run the provided checks with:
+
+```console
+docker compose run --rm tests
+```
+
+These checks provide useful feedback but are not exhaustive. Also inspect Airflow task status and logs, Flask output, database behavior on reruns, and PostgreSQL query plans.
+
+To reset all local database and Airflow state:
+
+```console
+docker compose down --volumes
+docker compose up --build
+```
+
+## Scope
+
+- You may change any file in the repository.
+- Prefer focused changes over an unnecessary rewrite.
+- Partial completion is acceptable and still useful for the follow-up discussion.
+- AI tools are permitted, but you must be able to explain every submitted change.
+- Do not include credentials, proprietary data, or external paid services.
+
+## Submission
+
+Push your code commits to the private repository provided to you. No separate written report is required.
+
+You will be asked to walk through your approach, changes, validation, assumptions, and unfinished work during the follow-up interview.
+
+The expected return window is three calendar days. Contact the recruiting team if scheduling or an accommodation requires an extension.
+
+## Support
+
+Contact the provided hiring-team representative if you cannot access the repository, install or run Docker Desktop, or believe your platform is unsupported. Application configuration, pipeline behavior, SQL, and code diagnosis are part of the exercise.
