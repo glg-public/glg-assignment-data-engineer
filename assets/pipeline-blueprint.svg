@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="840" viewBox="0 0 1440 840" role="img" aria-labelledby="title description">
   <title id="title">Professional profile pipeline blueprint</title>
-  <description id="description">Blueprint diagram showing CSV snapshots flowing through Airflow and Python ETL into PostgreSQL raw, operations, and mart schemas, then to a Flask application. Numbered markers identify requested-change areas without identifying defect locations.</description>
+  <description id="description">Blueprint diagram showing CSV snapshots flowing through Airflow and Python ETL into PostgreSQL raw, operations, and mart schemas, then to a Flask application. Asterisks identify enhancement areas. Known defect locations are intentionally not marked.</description>
   <defs>
     <pattern id="minorGrid" width="20" height="20" patternUnits="userSpaceOnUse">
       <path d="M20 0H0V20" fill="none" stroke="#2d6086" stroke-width="1" opacity=".22"/>
@@ -30,6 +30,8 @@
       .dimension { fill: none; stroke: #4e94b9; stroke-width: 1; }
       .marker { fill: #ffbd59; stroke: #fff0c2; stroke-width: 2; filter: url(#glow); }
       .marker-text { fill: #09263c; font-size: 15px; font-weight: 800; text-anchor: middle; dominant-baseline: central; }
+      .defect { fill: #ff7b6b; stroke: #ffd0ca; stroke-width: 2; }
+      .defect-text { fill: #09263c; font-size: 16px; font-weight: 900; text-anchor: middle; dominant-baseline: central; }
     </style>
   </defs>
 
@@ -139,27 +141,29 @@
   <path d="M865 495v55" class="line"/>
   <path d="M1222 550v-40" class="dash"/>
 
-  <!-- Requested-change markers -->
-  <g transform="translate(625 245)"><circle r="16" class="marker"/><text class="sans marker-text">2</text></g>
-  <g transform="translate(1040 540)"><circle r="16" class="marker"/><text class="sans marker-text">3</text></g>
-  <g transform="translate(1218 565)"><circle r="16" class="marker"/><text class="sans marker-text">4</text></g>
-  <g transform="translate(1350 262)"><circle r="16" class="marker"/><text class="sans marker-text">5</text></g>
+  <!-- Enhancement-area markers -->
+  <g transform="translate(625 245)"><circle r="16" class="marker"/><text class="sans marker-text">*</text></g>
+  <g transform="translate(1040 540)"><circle r="16" class="marker"/><text class="sans marker-text">*</text></g>
+  <g transform="translate(1218 565)"><circle r="16" class="marker"/><text class="sans marker-text">*</text></g>
+  <g transform="translate(1350 262)"><circle r="16" class="marker"/><text class="sans marker-text">*</text></g>
 
   <!-- Legend -->
   <g transform="translate(70 565)">
     <rect width="250" height="200" rx="8" fill="#092f4b" stroke="#4e94b9" stroke-width="1.5"/>
     <text x="22" y="32" class="sans eyebrow">DRAWING LEGEND</text>
     <circle cx="34" cy="66" r="14" class="marker"/>
-    <text x="34" y="66" class="sans marker-text">#</text>
-    <text x="58" y="71" class="sans detail">Requested Change</text>
-    <path d="M22 100h34" class="line" marker-end="none"/>
-    <text x="66" y="105" class="sans detail">data / control flow</text>
-    <path d="M22 132h34" class="dash"/>
-    <text x="66" y="137" class="sans detail">read path</text>
-    <text x="22" y="171" class="mono tiny">RC1: repair six observed</text>
-    <text x="22" y="188" class="mono tiny">defects across the system</text>
+    <text x="34" y="66" class="sans marker-text">*</text>
+    <text x="58" y="71" class="sans detail">enhancement area</text>
+    <circle cx="34" cy="105" r="14" class="defect"/>
+    <text x="34" y="105" class="sans defect-text">!</text>
+    <text x="58" y="102" class="sans detail">six known defects</text>
+    <text x="58" y="119" class="mono tiny">locations not marked</text>
+    <path d="M22 151h34" class="line" marker-end="none"/>
+    <text x="66" y="156" class="sans detail">data / control flow</text>
+    <path d="M22 181h34" class="dash"/>
+    <text x="66" y="186" class="sans detail">read path</text>
   </g>
 
   <path d="M70 788h1300" class="dimension"/>
-  <text x="70" y="816" class="mono tiny">MARKERS SHOW FEATURE AREAS, NOT DEFECT LOCATIONS. SEE CANDIDATE_INSTRUCTIONS.md FOR THE WORK CONTRACT.</text>
+  <text x="70" y="816" class="mono tiny">* ENHANCEMENT AREA   /   ! DEFECT SYMPTOMS ARE LISTED, BUT LOCATIONS ARE INTENTIONALLY NOT MARKED</text>
 </svg>

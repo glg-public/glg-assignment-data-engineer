@@ -14,7 +14,7 @@ CSV Snapshot -> Airflow -> PostgreSQL -> Flask
 
 [![Professional profile pipeline blueprint](assets/pipeline-blueprint.svg)](assets/pipeline-blueprint.svg)
 
-The numbered markers identify Requested Change areas. They do not identify defect locations; see `CANDIDATE_INSTRUCTIONS.md` for the assignment contract.
+`*` marks an enhancement area. The six known defect locations are intentionally not marked; their observed symptoms are listed in `CANDIDATE_INSTRUCTIONS.md`.
 
 ## 0. Prerequisites
 
