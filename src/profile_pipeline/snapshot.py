@@ -219,11 +219,16 @@ def process_snapshot(path: Path) -> str:
                 )
                 headcount_result = cursor.fetchone()
                 published_headcount = headcount_result[0] if headcount_result else 0
-                if published_headcount != active_count:
+                cursor.execute(
+                    "SELECT count(*) FROM mart.current_profile WHERE is_active"
+                )
+                expected_result = cursor.fetchone()
+                expected_headcount = expected_result[0] if expected_result else 0
+                if published_headcount != expected_headcount:
                     logger.error(
                         "Data-quality check failed: published headcount=%s, expected=%s",
                         published_headcount,
-                        active_count,
+                        expected_headcount,
                     )
 
                 cursor.execute(

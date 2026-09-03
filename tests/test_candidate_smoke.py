@@ -21,6 +21,16 @@ def test_snapshot_workflow(clean_database, first_snapshot):
         with connection.cursor() as cursor:
             cursor.execute("SELECT count(*) FROM raw.profile_snapshot")
             assert scalar(cursor) == 20
+
+
+def test_snapshot_rerun_is_safe(clean_database, first_snapshot):
+    assert process_snapshot(first_snapshot) == "completed"
+    assert process_snapshot(first_snapshot) == "skipped"
+
+    with psycopg2.connect(database_url()) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT count(*) FROM raw.profile_snapshot")
+            assert scalar(cursor) == 20
             cursor.execute("SELECT count(*) FROM mart.current_profile")
             assert scalar(cursor) == 20
 
