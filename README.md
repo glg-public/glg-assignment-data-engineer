@@ -1,4 +1,4 @@
-# Professional Profile Pipeline
+# GLG Data Engineer Case Study
 
 This repository contains a small data application used for a Data Operations Engineer take-home exercise.
 
@@ -14,7 +14,7 @@ CSV Snapshot -> Airflow -> PostgreSQL -> Flask
 
 [![Professional profile pipeline blueprint](assets/pipeline-blueprint.svg)](assets/pipeline-blueprint.svg)
 
-`*` marks an enhancement area. The six known defect locations are intentionally not marked; their observed symptoms are listed in `CANDIDATE_INSTRUCTIONS.md`.
+`#` marks an enhancement area. The six known defect locations are intentionally not marked; their observed symptoms are listed in `CANDIDATE_INSTRUCTIONS.md`.
 
 ## 0. Prerequisites
 
