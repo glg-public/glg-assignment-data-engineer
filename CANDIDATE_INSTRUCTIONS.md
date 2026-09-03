@@ -29,7 +29,15 @@ Alter the DAG so one run discovers and processes all unprocessed dated Snapshot 
 - A failed file must remain retryable.
 - Files dated after a failed file must not be processed during that run.
 
-### 3. Preserve Profile History
+### 3. Optimize Profile Search
+
+Improve the current-profile search query used by `/profiles` without changing its results or ordering.
+
+You may rewrite SQL, add indexes, or alter the schema. Use PostgreSQL's execution plan to understand and demonstrate the improvement rather than relying only on elapsed time.
+
+Use the deterministic larger dataset described in `README.md` for query-plan analysis.
+
+### 4. Preserve Profile History
 
 Evolve the current-state model into an SCD Type 2 profile-history model.
 
@@ -41,14 +49,6 @@ Evolve the current-state model into an SCD Type 2 profile-history model.
 - Keep `mart.current_profile` available as the current-state interface used by existing application pages.
 
 Example: a change first seen in the `2026-02-01` Snapshot closes the old version with `valid_to = 2026-02-01` and starts the new version with `valid_from = 2026-02-01`.
-
-### 4. Optimize Profile Search
-
-Improve the current-profile search query used by `/profiles` without changing its results or ordering.
-
-You may rewrite SQL, add indexes, or alter the schema. Use PostgreSQL's execution plan to understand and demonstrate the improvement rather than relying only on elapsed time.
-
-Use the deterministic larger dataset described in `README.md` for query-plan analysis.
 
 ### 5. Show Profile History
 
