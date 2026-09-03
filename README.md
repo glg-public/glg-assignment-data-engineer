@@ -12,7 +12,7 @@ Later Snapshots can show that a profile has changed company, job title, or depar
 CSV Snapshot -> Airflow -> PostgreSQL -> Flask
 ```
 
-[![Professional profile pipeline blueprint](assets/pipeline-blueprint.svg)](assets/pipeline-blueprint.svg)
+[![GLG Data Engineer Case Study blueprint](assets/pipeline-blueprint.svg)](assets/pipeline-blueprint.svg)
 
 `#` marks an enhancement area. The six known defect locations are intentionally not marked; their observed symptoms are listed in `CANDIDATE_INSTRUCTIONS.md`.
 

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="840" viewBox="0 0 1440 840" role="img" aria-labelledby="title description">
-  <title id="title">Professional profile pipeline blueprint</title>
+  <title id="title">GLG Data Engineer Case Study blueprint</title>
   <description id="description">Blueprint diagram showing CSV snapshots flowing through Airflow and Python ETL into PostgreSQL raw, operations, and mart schemas, then to a Flask application. Hash markers identify enhancement areas. Known defect locations are intentionally not marked.</description>
   <defs>
     <pattern id="minorGrid" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -40,8 +40,8 @@
   <path d="M34 34h55M34 34v55M1406 34h-55M1406 34v55M34 806h55M34 806v-55M1406 806h-55M1406 806v-55" class="dimension" stroke-width="3"/>
 
   <text x="70" y="78" class="sans eyebrow">SYSTEM DRAWING / DE-CASE-001</text>
-  <text x="70" y="118" class="sans" fill="#f1fbff" font-size="34" font-weight="750">PROFESSIONAL PROFILE PIPELINE</text>
-  <text x="70" y="147" class="mono detail">periodic snapshots / ordered ingestion / historical modeling / queryable output</text>
+  <text x="70" y="118" class="sans" fill="#f1fbff" font-size="34" font-weight="750">GLG DATA ENGINEER CASE STUDY</text>
+  <text x="70" y="147" class="mono detail">professional profile pipeline / periodic snapshots / historical modeling / queryable output</text>
   <text x="1368" y="78" class="mono tiny" text-anchor="end">REV 01</text>
   <text x="1368" y="101" class="mono tiny" text-anchor="end">NOT TO SCALE</text>
 
@@ -143,7 +143,7 @@
 
   <!-- Enhancement-area markers -->
   <g transform="translate(625 245)"><circle r="16" class="marker"/><text class="sans marker-text">#</text></g>
-  <g transform="translate(1040 540)"><circle r="16" class="marker"/><text class="sans marker-text">#</text></g>
+  <g transform="translate(1320 625)"><circle r="16" class="marker"/><text class="sans marker-text">#</text></g>
   <g transform="translate(1218 565)"><circle r="16" class="marker"/><text class="sans marker-text">#</text></g>
   <g transform="translate(1350 262)"><circle r="16" class="marker"/><text class="sans marker-text">#</text></g>
 
