@@ -1,73 +1,10 @@
 # Candidate Instructions
 
-## Overview
+Read `README.md` first for the application overview, data semantics, setup, operation, and troubleshooting instructions.
 
-This repository contains a small professional-profile data application:
+Your assignment is to implement the Requested Changes below. The existing application may contain defects that you will need to diagnose and repair while completing them.
 
-```text
-CSV Snapshots -> Airflow ETL -> PostgreSQL -> Flask
-```
-
-A fictional vendor periodically provides a complete CSV **Snapshot** of its professional-profile data. Each file represents the vendor's view at a point in time.
-
-Your assignment is to extend the application so it processes multiple Snapshots, preserves profile history, improves a query, and displays that history. The existing application may contain defects that you will need to diagnose and repair while completing the requested changes.
-
-## Prerequisites
-
-- Git
-- Docker Desktop with Docker Compose
-- macOS on Apple Silicon or Intel, or Windows using WSL2
-
-You do not need host installations of Python, Airflow, or PostgreSQL.
-
-## Start The Application
-
-From the repository root:
-
-```console
-docker compose up --build
-```
-
-Initial image downloads and Airflow setup may take several minutes. Check service status with:
-
-```console
-docker compose ps
-```
-
-The documented application addresses are:
-
-- Flask: http://localhost:5050
-- Airflow: http://localhost:8080
-- Airflow login: `airflow` / `airflow`
-
-In Airflow, find the `profile_snapshot` DAG, unpause it, and trigger a run. Use service and task logs when startup or a run fails, or when output is unexpected. The repository may not initially behave exactly as documented.
-
-The Flask application contains:
-
-- `/`: pipeline and Snapshot overview
-- `/profiles`: searchable current profiles
-- `/companies`: current company headcount
-
-## Source Data
-
-Snapshot files are in `data/snapshots/` and use names such as:
-
-```text
-profiles_2026-01-15.csv
-```
-
-Each `profile_id` is stable. A row includes the profile's display name, company, job title, department, and active state.
-
-When comparing Snapshots:
-
-- A new active profile starts its first version.
-- A company, job-title, or department change starts a new version.
-- A display-name-only change does not start a new version.
-- `is_active=false` closes the current version.
-- A later reactivation starts a new version.
-- Absence from one Snapshot does not imply inactivity.
-
-The incoming CSV files are Snapshots. The derived historical profile data is a Slowly Changing Dimension Type 2 model.
+The repository may not initially behave exactly as documented. Use service and Airflow task logs when startup or output is unexpected.
 
 ## Requested Changes
 
@@ -98,11 +35,7 @@ Improve the current-profile search query used by `/profiles` without changing it
 
 You may rewrite SQL, add indexes, or alter the schema. Use PostgreSQL's execution plan to understand and demonstrate the improvement rather than relying only on elapsed time.
 
-Generate a deterministic larger dataset for query-plan analysis with:
-
-```console
-docker compose run --rm generate-performance-data
-```
+Use the deterministic larger dataset described in `README.md` for query-plan analysis.
 
 ### 4. Show Profile History
 
@@ -118,20 +51,7 @@ Inactive profiles should remain available through their history page even though
 
 ## Validation
 
-Run the provided checks with:
-
-```console
-docker compose run --rm tests
-```
-
-These checks provide useful feedback but are not exhaustive. Also inspect Airflow task status and logs, Flask output, database behavior on reruns, and PostgreSQL query plans.
-
-To reset all local database and Airflow state:
-
-```console
-docker compose down --volumes
-docker compose up --build
-```
+Run the checks documented in `README.md`. They provide useful feedback but are not exhaustive. Also inspect Airflow task status and logs, Flask output, database behavior on reruns, and PostgreSQL query plans.
 
 ## Scope
 
