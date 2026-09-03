@@ -12,7 +12,7 @@ Later Snapshots can show that a profile has changed company, job title, or depar
 CSV Snapshot -> Airflow -> PostgreSQL -> Flask
 ```
 
-## Prerequisites
+## 0. Prerequisites
 
 - Git
 - Docker Desktop with Docker Compose
@@ -20,7 +20,32 @@ CSV Snapshot -> Airflow -> PostgreSQL -> Flask
 
 No host Python or PostgreSQL installation is required.
 
-## Start The Application
+Install Docker Desktop if needed:
+
+- Windows: https://docs.docker.com/desktop/setup/install/windows-install/
+- macOS: https://docs.docker.com/desktop/setup/install/mac-install/
+
+On Windows, Docker Desktop may require WSL2 and hardware virtualization. Follow Docker's installation guide if either is not enabled. Accept any Docker Desktop prompt requesting file-sharing access for this repository.
+
+Confirm Docker is running:
+
+```console
+docker --version
+docker compose version
+```
+
+## 1. Clone The Repository
+
+Clone the private repository URL provided by the hiring team, then open its directory:
+
+```console
+git clone <repository-url>
+cd <repository-directory>
+```
+
+You do not need to fork the repository.
+
+## 2. Start The Application
 
 From the repository root:
 
@@ -28,15 +53,34 @@ From the repository root:
 docker compose up --build
 ```
 
-Initial image downloads and Airflow setup may take several minutes. When startup completes:
+Keep this terminal open. Initial image downloads and Airflow setup may take several minutes.
+
+In another terminal, check service status:
+
+```console
+docker compose ps
+```
+
+Wait until `postgres`, `web`, and `airflow-webserver` report healthy and `airflow-scheduler` reports running. The one-time `app-migrate` and `airflow-init` services should exit successfully.
+
+When startup completes:
 
 - Flask: http://localhost:5050
 - Airflow: http://localhost:8080
 - Airflow username and password: `airflow` / `airflow`
 
-In Airflow, open the `profile_snapshot` DAG, enable it if needed, and trigger a run. The baseline DAG processes `profiles_2026-01-15.csv`.
+## 3. Run The Pipeline
 
-## Inspect The Results
+The Baseline DAG processes `profiles_2026-01-15.csv`.
+
+1. Open Airflow at http://localhost:8080.
+2. Sign in with `airflow` / `airflow`.
+3. Open the `profile_snapshot` DAG.
+4. Unpause the DAG if needed.
+5. Trigger a run using the play button.
+6. Open the task instance to inspect its logs and result.
+
+## 4. Inspect The Results
 
 The Flask application provides:
 
@@ -44,7 +88,9 @@ The Flask application provides:
 - `/profiles`: searchable current active profiles
 - `/companies`: active profile counts by company
 
-## Run Checks
+Refresh Flask after the DAG completes.
+
+## 5. Run Checks
 
 With PostgreSQL running:
 
@@ -52,7 +98,7 @@ With PostgreSQL running:
 docker compose run --rm tests
 ```
 
-## Generate Query-Plan Data
+## 6. Generate Query-Plan Data
 
 The checked-in Snapshots stay small enough to inspect manually. Generate a larger deterministic current-profile dataset when examining profile-search query plans:
 
@@ -62,7 +108,7 @@ docker compose run --rm generate-performance-data
 
 Generated profile IDs start with `PERF-`. Running the command again replaces prior generated rows.
 
-## Reset Everything
+## 7. Reset Everything
 
 ```console
 docker compose down --volumes
@@ -75,7 +121,10 @@ The first command permanently removes local case-study database and Airflow stat
 
 - Confirm Docker Desktop is running before invoking Docker Compose.
 - Use `docker compose ps` to inspect service status.
+- If an address is unavailable, compare the running services with the documented application addresses.
+- On Windows, keep the repository inside the WSL2 filesystem if bind-mounted files are slow or permission behavior is inconsistent.
 - Use the Airflow task log to investigate pipeline failures.
 - Use `docker compose logs web` to inspect Flask startup failures.
+- Use `docker compose logs airflow-scheduler` to inspect DAG scheduling failures.
 
 For the assignment requirements and submission guidance, see `CANDIDATE_INSTRUCTIONS.md`.
