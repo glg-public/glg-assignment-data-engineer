@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Companies | Profile Pipeline{% endblock %}
+{% block content %}
+  <div class="page-heading"><div><p class="eyebrow">Current state</p><h1>Company headcount</h1></div></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Company</th><th>Company ID</th><th>Active profiles</th></tr></thead>
+    <tbody>{% for company in companies %}<tr>
+      <td>{{ company.company_name }}</td><td><code>{{ company.company_id }}</code></td>
+      <td>{{ company.active_profiles }}</td>
+    </tr>{% else %}<tr><td colspan="3">No active companies.</td></tr>{% endfor %}</tbody>
+  </table></div>
+{% endblock %}

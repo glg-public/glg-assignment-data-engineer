@@ -54,7 +54,7 @@ The initial database shape is:
 - `mart.current_profile` for Baseline current-state output.
 - `mart.profile` and `mart.company` for stable entities in the Reference Application.
 - `mart.profile_version` for Reference Application history.
-- `mart.company_headcount` for current active counts by company.
+- `mart.company_headcount`, a regular view for current active counts by company.
 
 When the Reference Application introduces the entity and version tables, `mart.current_profile` becomes a compatibility view so existing consumers continue to work. Database changes use plain versioned SQL migrations invoked by Python rather than an ORM migration framework.
 

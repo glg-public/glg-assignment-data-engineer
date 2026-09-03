@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Overview | Profile Pipeline{% endblock %}
+{% block content %}
+  <section class="hero">
+    <p class="eyebrow">Vendor data operations</p>
+    <h1>Professional-profile pipeline</h1>
+    <p>Periodic vendor Snapshots are validated, retained, and published for downstream use.</p>
+  </section>
+  <section class="metrics" aria-label="Current profile metrics">
+    <article><strong>{{ counts.active_profiles }}</strong><span>Active profiles</span></article>
+    <article><strong>{{ counts.inactive_profiles }}</strong><span>Inactive profiles</span></article>
+    <article><strong>{{ counts.companies }}</strong><span>Active companies</span></article>
+  </section>
+  <section class="snapshot-summary">
+    <div>
+      <h2>Latest successful load</h2>
+      {% if latest_load %}
+        <p><strong>{{ latest_load.snapshot_date }}</strong> from <code>{{ latest_load.source_file }}</code></p>
+      {% else %}<p class="empty">No successful load yet.</p>{% endif %}
+    </div>
+    <div>
+      <h2>Available files</h2>
+      <ul>{% for filename in available_files %}<li><code>{{ filename }}</code></li>{% else %}<li>No Snapshot files found.</li>{% endfor %}</ul>
+    </div>
+  </section>
+  <section>
+    <h2>Processing history</h2>
+    {% if loads %}
+      <div class="table-wrap"><table>
+        <thead><tr><th>Date</th><th>File</th><th>Status</th><th>Rows</th><th>Completed</th></tr></thead>
+        <tbody>{% for load in loads %}<tr>
+          <td>{{ load.snapshot_date }}</td><td>{{ load.source_file }}</td>
+          <td><span class="status status-{{ load.status }}">{{ load.status }}</span></td>
+          <td>{{ load.row_count or '—' }}</td><td>{{ load.completed_at or '—' }}</td>
+        </tr>{% endfor %}</tbody>
+      </table></div>
+    {% else %}<p class="empty">No Snapshot has been processed yet. Trigger the DAG in Airflow.</p>{% endif %}
+  </section>
+{% endblock %}

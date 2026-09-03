@@ -120,18 +120,18 @@ Airflow metadata and application data must use separate databases or schemas so 
 
 ### 6.2 Database Schemas
 
-Use these logical schemas and relations:
+Use these logical schemas and database objects:
 
-| Relation | State | Purpose |
-|---|---|---|
-| `raw.profile_snapshot` | All | Immutable landed rows with Snapshot provenance |
-| `ops.snapshot_ingestion` | All | File status, row count, timestamps, and failure information |
-| `mart.current_profile` table | Baseline | Current profile state consumed by Flask |
-| `mart.profile` | Reference | Stable profile identity and latest display name |
-| `mart.company` | Reference | Stable company identity and latest display name |
-| `mart.profile_version` | Reference | SCD Type 2 company, title, and department state |
-| `mart.current_profile` view | Reference | Compatibility projection over Reference tables |
-| `mart.company_headcount` | All | Current active profile count grouped by company |
+| Database object | Type | Application state | Purpose |
+|---|---|---|---|
+| `raw.profile_snapshot` | Table | All | Immutable landed rows with Snapshot provenance |
+| `ops.snapshot_ingestion` | Table | All | File status, row count, timestamps, and failure information |
+| `mart.current_profile` | Table | Baseline | Current profile state consumed by Flask |
+| `mart.profile` | Table | Reference | Stable profile identity and latest display name |
+| `mart.company` | Table | Reference | Stable company identity and latest display name |
+| `mart.profile_version` | Table | Reference | SCD Type 2 company, title, and department state |
+| `mart.current_profile` | View | Reference | Compatibility projection over Reference tables |
+| `mart.company_headcount` | View | All | Current active profile count grouped by company |
 
 `raw.profile_snapshot` enforces uniqueness on `(snapshot_date, profile_id)`.
 

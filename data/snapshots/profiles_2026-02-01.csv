@@ -1,0 +1,21 @@
+profile_id,full_name,company_id,company_name,job_title,department,is_active
+P001,Avery Chen,C001,Northstar Analytics,Senior Data Engineer,Engineering,true
+P002,Morgan Rivera,C001,Northstar Analytics,Senior Analyst,Operations,true
+P003,Jordan Okafor,C002,Harbor Health,Product Manager,Product,true
+P004,Riley Singh,C002,Harbor Health,Analytics Manager,Analytics,true
+P005,Casey Brown,C003,Atlas Manufacturing,Plant Manager,Operations,true
+P006,Taylor Kim,C003,Atlas Manufacturing,Software Engineer,Data Platform,true
+P008,Drew Martinez,,,,,false
+P009,Quinn Wilson,C005,Solstice Energy,Project Engineer,Engineering,true
+P010,Reese Johnson,C005,Solstice Energy,Recruiter,People,true
+P011,Alex Thompson,C006,Cedar Retail,Merchandise Planner,Merchandising,true
+P012,Sam Williams,C006,Cedar Retail,Store Operations Lead,Operations,true
+P013,Jamie Garcia,C001,Northstar Analytics,Data Quality Analyst,Operations,true
+P015,Emerson Lee,C007,Brightline Media,Content Strategist,Marketing,true
+P016,Parker Jones,C007,Brightline Media,Sales Analyst,Sales,true
+P017,Hayden Moore,C008,Redwood Logistics,Logistics Manager,Operations,true
+P018,Rowan Anderson,C008,Redwood Logistics,Backend Engineer,Technology,true
+P019,Sage Thomas,C009,Bluebird Foods,Category Manager,Merchandising,true
+P020,Finley White,C009,Bluebird Foods,Finance Analyst,Finance,true
+P021,Dakota Harris,C010,Vertex Learning,Program Director,Education,true
+P022,Skyler Martin,C010,Vertex Learning,Platform Engineer,Technology,true

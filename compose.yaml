@@ -1,0 +1,150 @@
+name: data-engineering-case-study
+
+x-airflow-common: &airflow-common
+  build:
+    context: .
+    dockerfile: docker/airflow.Dockerfile
+  environment: &airflow-environment
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+    AIRFLOW__WEBSERVER__SECRET_KEY: local-case-study-key
+    APP_DATABASE_URL: postgresql://case_study:case_study@postgres:5432/profile_data
+    PYTHONPATH: /opt/project/src
+    SNAPSHOT_FILE: /opt/project/data/snapshots/profiles_2026-01-15.csv
+  volumes:
+    - ./dags:/opt/airflow/dags:ro
+    - ./data:/opt/project/data:ro
+    - ./src:/opt/project/src:ro
+    - airflow-logs:/opt/airflow/logs
+  depends_on:
+    app-migrate:
+      condition: service_completed_successfully
+
+services:
+  postgres:
+    image: postgres:16.4-alpine
+    environment:
+      POSTGRES_DB: airflow
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow -d airflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/postgres-init.sql:/docker-entrypoint-initdb.d/01-profile-data.sql:ro
+
+  app-migrate:
+    build:
+      context: .
+      dockerfile: docker/app.Dockerfile
+    command: python -m profile_pipeline.migrations
+    environment:
+      APP_DATABASE_URL: postgresql://case_study:case_study@postgres:5432/profile_data
+      MIGRATIONS_DIR: /app/migrations
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  airflow-init:
+    <<: *airflow-common
+    command:
+      - bash
+      - -c
+      - >-
+        airflow db migrate &&
+        (airflow users create
+        --username airflow
+        --password airflow
+        --firstname Data
+        --lastname Engineer
+        --role Admin
+        --email airflow@example.test ||
+        airflow users reset-password --username airflow --password airflow)
+    restart: "no"
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/app.Dockerfile
+    command: gunicorn --bind 0.0.0.0:5000 --workers 2 "profile_pipeline.web:create_app()"
+    environment:
+      APP_DATABASE_URL: postgresql://case_study:case_study@postgres:5432/profile_data
+      SNAPSHOT_DIR: /app/data/snapshots
+    ports:
+      - "5050:5000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      app-migrate:
+        condition: service_completed_successfully
+
+  tests:
+    build:
+      context: .
+      dockerfile: docker/app.Dockerfile
+    command: pytest -q -p no:cacheprovider
+    environment:
+      APP_DATABASE_URL: postgresql://case_study:case_study@postgres:5432/profile_data_test
+      AIRFLOW_HEALTH_URL: http://airflow-webserver:8080/health
+      WEB_HEALTH_URL: http://web:5000/health
+      MIGRATIONS_DIR: /app/migrations
+      SNAPSHOT_FILE: /app/data/snapshots/profiles_2026-01-15.csv
+    depends_on:
+      airflow-webserver:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data:ro
+      - ./migrations:/app/migrations:ro
+      - ./src:/app/src:ro
+      - ./tests:/app/tests:ro
+    profiles: ["tools"]
+
+  generate-performance-data:
+    build:
+      context: .
+      dockerfile: docker/app.Dockerfile
+    command: python -m profile_pipeline.generate_performance_data
+    environment:
+      APP_DATABASE_URL: postgresql://case_study:case_study@postgres:5432/profile_data
+      PERFORMANCE_PROFILE_COUNT: "100000"
+    depends_on:
+      app-migrate:
+        condition: service_completed_successfully
+    volumes:
+      - ./src:/app/src:ro
+    profiles: ["tools"]
+
+volumes:
+  airflow-logs:
+  postgres-data:
