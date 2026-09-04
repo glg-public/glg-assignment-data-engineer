@@ -117,7 +117,7 @@ Generated profile IDs start with `PERF-`. Running the command again replaces pri
 
 ## 7. Complete The Case Study
 
-Follow the Requested Changes in [`CANDIDATE_INSTRUCTIONS.md`](CANDIDATE_INSTRUCTIONS.md) to complete the case study. That document also explains validation, scope, submission, and support expectations.
+Follow the Requested Changes in [`CANDIDATE_INSTRUCTIONS.md`](CANDIDATE_INSTRUCTIONS.md) to complete the case study. That document also explains validation, scope, the follow-up walkthrough, and support expectations.
 
 ## Troubleshooting
 

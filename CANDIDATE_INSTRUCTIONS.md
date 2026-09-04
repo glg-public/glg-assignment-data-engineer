@@ -71,16 +71,16 @@ Run the checks documented in `README.md`. They provide useful feedback but are n
 - You may change any file in the repository.
 - Prefer focused changes over an unnecessary rewrite.
 - Partial completion is acceptable and still useful for the follow-up discussion.
-- AI tools are permitted, but you must be able to explain every submitted change.
+- AI tools are permitted, but you must be able to explain every change you make.
 - Do not include credentials, proprietary data, or external paid services.
 
-## Submission
+## Follow-Up Interview
 
-Push your code commits to the private repository provided to you. No separate written report is required.
+Keep your changes on your machine; you do not need to upload or submit them.
 
-You will be asked to walk through your approach, changes, validation, assumptions, and unfinished work during the follow-up interview.
+During the follow-up interview, be prepared to share your screen and walk through the running application, code changes, logs, validation, assumptions, and unfinished work.
 
-The expected return window is three calendar days. Contact the recruiting team if scheduling or an accommodation requires an extension.
+Complete what you reasonably can before the scheduled follow-up interview. Contact the recruiting team if scheduling or an accommodation requires more time.
 
 ## Support
 
