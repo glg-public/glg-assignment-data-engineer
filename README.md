@@ -92,6 +92,7 @@ The Flask application provides:
 
 - `/`: pipeline overview and Snapshot loads
 - `/profiles`: searchable current active profiles
+- `/profiles/<profile_id>`: profile history page to complete during the case study
 - `/companies`: active profile counts by company
 
 Refresh Flask after the DAG completes.
