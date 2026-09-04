@@ -53,6 +53,8 @@ def test_published_data_is_visible(clean_database, first_snapshot):
 
     overview = client.get("/")
     assert overview.status_code == 200
+    assert b"GLG" in overview.data
+    assert b"Professional Profile" in overview.data
     assert b"Spend approximately 60-90 minutes" in overview.data
     assert b"Avery Chen" in client.get("/profiles?q=Avery").data
     assert b"Northstar Analytics" in client.get("/companies").data

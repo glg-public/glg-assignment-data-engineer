@@ -3,12 +3,18 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Profile Pipeline{% endblock %}</title>
+    <title>{% block title %}GLG Data Engineer Case Study{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
     <header>
-      <a class="brand" href="{{ url_for('overview') }}">Profile Pipeline</a>
+      <a class="brand" href="{{ url_for('overview') }}">
+        <span class="brand-mark">GLG</span>
+        <span class="brand-copy">
+          <strong>Data Engineer</strong>
+          <small>Case Study</small>
+        </span>
+      </a>
       <nav aria-label="Main navigation">
         <a href="{{ url_for('overview') }}">Overview</a>
         <a href="{{ url_for('profiles') }}">Profiles</a>

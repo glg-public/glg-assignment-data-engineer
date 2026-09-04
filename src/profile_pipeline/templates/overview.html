@@ -1,10 +1,15 @@
 {% extends "base.html" %}
-{% block title %}Overview | Profile Pipeline{% endblock %}
+{% block title %}Overview | GLG Data Engineer Case Study{% endblock %}
 {% block content %}
   <section class="hero">
-    <p class="eyebrow">Vendor data operations</p>
-    <h1>Professional-profile pipeline</h1>
-    <p>Periodic vendor Snapshots are validated, retained, and published for downstream use.</p>
+    <div class="hero-copy">
+      <p class="eyebrow">Vendor data operations</p>
+      <h1>Professional Profile <span>Pipeline</span></h1>
+      <p>Validate periodic vendor Snapshots, preserve trustworthy profile data, and publish it for downstream use.</p>
+    </div>
+    <div class="pipeline-path" aria-label="Pipeline stages">
+      <span>CSV</span><i></i><span>Airflow</span><i></i><span>PostgreSQL</span><i></i><span>Flask</span>
+    </div>
   </section>
   <aside class="case-study-guidance" aria-label="Case study guidance">
     <strong>Case study guidance</strong>
