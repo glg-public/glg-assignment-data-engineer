@@ -12,7 +12,7 @@ x-airflow-common: &airflow-common
     AIRFLOW__WEBSERVER__SECRET_KEY: local-case-study-key
     APP_DATABASE_URL: postgresql://case_study:case_study@postgres:5432/profile_data
     PYTHONPATH: /opt/project/src
-    SNAPSHOT_FILE: /opt/project/data/snapshot/profiles_2026-01-15.csv
+    SNAPSHOT_SOURCE: ${SNAPSHOT_SOURCE}
   volumes:
     - ./dags:/opt/airflow/dags:ro
     - ./data:/opt/project/data:ro
@@ -117,7 +117,7 @@ services:
       AIRFLOW_HEALTH_URL: http://airflow-webserver:8080/health
       WEB_HEALTH_URL: http://web:5000/health
       MIGRATIONS_DIR: /app/migrations
-      SNAPSHOT_FILE: /app/data/snapshots/profiles_2026-01-15.csv
+      SNAPSHOT_SOURCE: /app/data/snapshots/profiles_2026-01-15.csv
     depends_on:
       airflow-webserver:
         condition: service_healthy

@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 def profile_snapshot_dag():
     @task
     def load_available_snapshots() -> dict[str, str]:
-        path = Path(os.environ["SNAPSHOT_FILE"])
+        path = Path(os.environ["SNAPSHOT_SOURCE"])
         logger.info("Configured Snapshot source: %s", path)
         result = process_available_snapshots(path)
         logger.info("Snapshot processing results: %s", result)
