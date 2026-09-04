@@ -8,10 +8,6 @@ A fictional vendor periodically provides a complete **Snapshot** of its professi
 
 Later Snapshots can show that a profile has changed company, job title, or department. The intended extended model preserves those changes as **Slowly Changing Dimension Type 2** history: the incoming CSV files are Snapshots, while the derived profile history is the SCD Type 2 model. An explicit `is_active=false` closes a current profile; absence from one Snapshot does not imply inactivity.
 
-```text
-CSV Snapshot -> Airflow -> PostgreSQL -> Flask
-```
-
 [![GLG Data Engineer Case Study blueprint](assets/pipeline-blueprint.svg)](assets/pipeline-blueprint.svg)
 
 `#` marks an enhancement area. The six known defect locations are intentionally not marked; their observed symptoms are listed in `CANDIDATE_INSTRUCTIONS.md`.
@@ -54,12 +50,18 @@ You do not need to fork the repository.
 From the repository root:
 
 ```console
-docker compose up --build
+docker compose up --build --detach
 ```
 
-Keep this terminal open. Initial image downloads and Airflow setup may take several minutes.
+Initial image downloads and Airflow setup may take several minutes. To optionally follow startup logs:
 
-In another terminal, check service status:
+```console
+docker compose logs --follow
+```
+
+Press `Ctrl+C` to stop following the logs. The containers continue running in the background.
+
+In the same terminal, check service status:
 
 ```console
 docker compose ps
@@ -132,5 +134,5 @@ Only reset if you need a clean database and Airflow environment while troublesho
 
 ```console
 docker compose down --volumes
-docker compose up --build
+docker compose up --build --detach
 ```
