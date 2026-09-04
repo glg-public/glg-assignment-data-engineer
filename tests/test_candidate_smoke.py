@@ -1,7 +1,11 @@
 import psycopg2
 
 from profile_pipeline.config import database_url
-from profile_pipeline.snapshot import process_snapshot, read_snapshot
+from profile_pipeline.snapshot import (
+    process_available_snapshots,
+    process_snapshot,
+    read_snapshot,
+)
 from profile_pipeline.web import create_app
 
 
@@ -21,6 +25,12 @@ def test_snapshot_workflow(clean_database, first_snapshot):
         with connection.cursor() as cursor:
             cursor.execute("SELECT count(*) FROM raw.profile_snapshot")
             assert scalar(cursor) == 20
+
+
+def test_available_snapshot_entrypoint(clean_database, first_snapshot):
+    assert process_available_snapshots(first_snapshot) == {
+        first_snapshot.name: "completed"
+    }
 
 
 def test_snapshot_rerun_is_safe(clean_database, first_snapshot):

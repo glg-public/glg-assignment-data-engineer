@@ -5,7 +5,7 @@ from pathlib import Path
 
 from airflow.decorators import dag, task
 
-from profile_pipeline.snapshot import process_snapshot
+from profile_pipeline.snapshot import process_available_snapshots
 
 
 logger = logging.getLogger(__name__)
@@ -22,14 +22,14 @@ logger = logging.getLogger(__name__)
 )
 def profile_snapshot_dag():
     @task
-    def load_configured_snapshot() -> str:
+    def load_available_snapshots() -> dict[str, str]:
         path = Path(os.environ["SNAPSHOT_FILE"])
-        logger.info("Configured Snapshot file: %s", path)
-        result = process_snapshot(path)
-        logger.info("Snapshot processing result: %s", result)
+        logger.info("Configured Snapshot source: %s", path)
+        result = process_available_snapshots(path)
+        logger.info("Snapshot processing results: %s", result)
         return result
 
-    load_configured_snapshot()
+    load_available_snapshots()
 
 
 profile_snapshot_dag()

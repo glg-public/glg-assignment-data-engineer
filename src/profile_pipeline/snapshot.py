@@ -97,6 +97,10 @@ def read_snapshot(path: Path) -> list[ProfileRow]:
     return rows
 
 
+def process_available_snapshots(path: Path) -> dict[str, str]:
+    return {path.name: process_snapshot(path)}
+
+
 def process_snapshot(path: Path) -> str:
     snapshot_date = parse_snapshot_date(path)
     logger.info("Starting Snapshot %s from %s", snapshot_date, path)
