@@ -25,12 +25,16 @@ def test_snapshot_workflow(clean_database, first_snapshot):
         with connection.cursor() as cursor:
             cursor.execute("SELECT count(*) FROM raw.profile_snapshot")
             assert scalar(cursor) == 20
+            cursor.execute("SELECT count(*) FROM mart.current_profile")
+            assert scalar(cursor) == 20
 
 
-def test_available_snapshot_entrypoint(clean_database, first_snapshot):
-    assert process_available_snapshots(first_snapshot) == {
-        first_snapshot.name: "completed"
-    }
+def test_available_snapshot_entrypoint(clean_database, snapshot_directory):
+    assert list(process_available_snapshots(snapshot_directory)) == [
+        "profiles_2026-01-15.csv",
+        "profiles_2026-02-01.csv",
+        "profiles_2026-02-15.csv",
+    ]
 
 
 def test_snapshot_rerun_is_safe(clean_database, first_snapshot):
@@ -40,8 +44,6 @@ def test_snapshot_rerun_is_safe(clean_database, first_snapshot):
     with psycopg2.connect(database_url()) as connection:
         with connection.cursor() as cursor:
             cursor.execute("SELECT count(*) FROM raw.profile_snapshot")
-            assert scalar(cursor) == 20
-            cursor.execute("SELECT count(*) FROM mart.current_profile")
             assert scalar(cursor) == 20
 
 

@@ -25,3 +25,8 @@ def clean_database():
 @pytest.fixture()
 def first_snapshot() -> Path:
     return Path("/app/data/snapshots/profiles_2026-01-15.csv")
+
+
+@pytest.fixture()
+def snapshot_directory() -> Path:
+    return Path("/app/data/snapshots")
