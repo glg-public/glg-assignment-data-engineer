@@ -2,6 +2,8 @@
 
 Read `README.md` first for the application overview, data semantics, setup, operation, and troubleshooting instructions.
 
+> **Case study guidance:** Spend approximately 60-90 minutes. We do not expect every Requested Change to be completed. Prioritize as you see fit and be ready to explain your decisions. Do not spend time making the system production-ready.
+
 Your assignment is to implement the Requested Changes below.
 
 The repository may not initially behave exactly as documented. Use service and Airflow task logs when startup or output is unexpected.
@@ -10,14 +12,16 @@ The repository may not initially behave exactly as documented. Use service and A
 
 ### 1. Repair Known Defects
 
-Diagnose and repair these six observed problems:
+Diagnose and repair these six observed problems. The starting points identify where to begin investigating, not the cause or required fix.
 
-1. The Flask application is not available at the documented address after the stack starts.
-2. The `profile_snapshot` DAG fails when it attempts to read its configured source file.
-3. A profile explicitly marked inactive can remain in current-profile results and company headcount.
-4. Rerunning an already completed Snapshot can fail instead of completing safely.
-5. Company headcount can exceed the number of current active profiles belonging to that company.
-6. Snapshot processing can report success even when a data-quality check reports invalid output.
+| Observed problem | Investigation starting point |
+|---|---|
+| The Flask application is not available at the documented address after the stack starts. | Application configuration in `.env` |
+| The `profile_snapshot` DAG fails when it attempts to read its configured source. | Airflow task log and Snapshot configuration |
+| A profile explicitly marked inactive can remain in current-profile results and company headcount. | CSV parsing and current-profile loading |
+| Rerunning an already completed Snapshot can fail instead of completing safely. | Ingestion status and rerun handling |
+| Company headcount can exceed the number of current active profiles belonging to that company. | `mart.company_headcount` SQL and join grain |
+| Snapshot processing can report success even when a data-quality check reports invalid output. | Data-quality error handling |
 
 Fix the underlying causes rather than suppressing symptoms or removing validation.
 

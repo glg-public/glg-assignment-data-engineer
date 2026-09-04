@@ -24,6 +24,9 @@ h1 { font-size: clamp(2.3rem, 7vw, 5rem); max-width: 760px; }
 h2 { margin-top: 3rem; }
 .hero { border-bottom: 1px solid #b7b2a4; padding-bottom: 2rem; }
 .hero > p:last-child { font-size: 1.2rem; max-width: 650px; }
+.case-study-guidance { background: #fff4d6; border: 1px solid #d59b31; border-left-width: 5px; margin: 2rem 0; padding: 1.2rem 1.4rem; }
+.case-study-guidance strong { font-family: Arial, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+.case-study-guidance p { margin-bottom: 0; }
 .eyebrow { color: #a3422c; font-family: Arial, sans-serif; font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
 .metrics { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); margin: 2rem 0; }
 .metrics article { background: #fffdf5; border-left: 4px solid #c9653d; padding: 1.4rem; }

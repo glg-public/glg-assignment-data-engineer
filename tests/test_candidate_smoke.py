@@ -51,6 +51,8 @@ def test_published_data_is_visible(clean_database, first_snapshot):
     process_snapshot(first_snapshot)
     client = create_app().test_client()
 
-    assert client.get("/").status_code == 200
+    overview = client.get("/")
+    assert overview.status_code == 200
+    assert b"Spend approximately 60-90 minutes" in overview.data
     assert b"Avery Chen" in client.get("/profiles?q=Avery").data
     assert b"Northstar Analytics" in client.get("/companies").data
