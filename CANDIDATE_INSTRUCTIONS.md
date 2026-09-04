@@ -42,7 +42,7 @@ Use the deterministic larger dataset described in `README.md` for query-plan ana
 Evolve the current-state model into an SCD Type 2 profile-history model.
 
 - Preserve changes to company, job title, and department.
-- Keep stable profile and company entities separate from versioned employment attributes.
+- Keep display-name changes from creating new employment-history versions.
 - Use inclusive `valid_from` and exclusive `valid_to` dates.
 - A current version has `valid_to = NULL`.
 - Each active profile has exactly one current version; inactive profiles have none.
