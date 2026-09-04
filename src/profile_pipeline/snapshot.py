@@ -98,6 +98,7 @@ def read_snapshot(path: Path) -> list[ProfileRow]:
 
 
 def process_available_snapshots(path: Path) -> dict[str, str]:
+    # Candidate hint: process every available Snapshot, not only this configured file.
     return {path.name: process_snapshot(path)}
 
 
