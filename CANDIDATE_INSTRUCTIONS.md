@@ -12,12 +12,11 @@ The repository may not initially behave exactly as documented. Use service and A
 
 ### 1. Repair Known Defects
 
-Diagnose and repair these six observed problems. The starting points identify where to begin investigating, not the cause or required fix.
+Diagnose and repair these five observed problems. The starting points identify where to begin investigating, not the cause or required fix.
 
 | Observed problem | Investigation starting point |
 |---|---|
 | The Flask application is not available at the documented address after the stack starts. | Application configuration in `.env` |
-| The `profile_snapshot` DAG fails when it attempts to read its configured source. | Airflow task log and Snapshot configuration |
 | A profile explicitly marked inactive can remain in current-profile results and company headcount. | CSV parsing and current-profile loading |
 | Rerunning an already completed Snapshot can fail instead of completing safely. | Ingestion status and rerun handling |
 | Company headcount can exceed the number of current active profiles belonging to that company. | `mart.company_headcount` SQL and join grain |
