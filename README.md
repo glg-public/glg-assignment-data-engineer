@@ -132,7 +132,7 @@ Follow the Requested Changes in [`CANDIDATE_INSTRUCTIONS.md`](CANDIDATE_INSTRUCT
 
 ### Reset Local State
 
-Only reset if you need a clean database and Airflow environment while troubleshooting. This permanently removes local pipeline results, task history, and database state, but does not delete your code changes.
+Only reset if you need a clean database and Airflow environment while troubleshooting. This permanently removes local pipeline results, task history, and database state, but does not delete your code changes or the local `airflow-logs/` folder.
 
 ```console
 docker compose down --volumes
