@@ -17,7 +17,7 @@ x-airflow-common: &airflow-common
     - ./dags:/opt/airflow/dags:ro
     - ./data:/opt/project/data:ro
     - ./src:/opt/project/src:ro
-    - airflow-logs:/opt/airflow/logs
+    - ./airflow-logs:/opt/airflow/logs
   depends_on:
     app-migrate:
       condition: service_completed_successfully
@@ -146,5 +146,4 @@ services:
     profiles: ["tools"]
 
 volumes:
-  airflow-logs:
   postgres-data:

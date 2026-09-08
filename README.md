@@ -125,7 +125,8 @@ Follow the Requested Changes in [`CANDIDATE_INSTRUCTIONS.md`](CANDIDATE_INSTRUCT
 - Use `docker compose ps` to inspect service status.
 - If an address is unavailable, compare the running services with the documented application addresses.
 - On Windows, keep the repository inside the WSL2 filesystem if bind-mounted files are slow or permission behavior is inconsistent.
-- Use the Airflow task log to investigate pipeline failures.
+- Airflow task logs are available in the UI and in the local `airflow-logs/` directory.
+- A task attempt is typically stored under `airflow-logs/dag_id=profile_snapshot/run_id=.../task_id=load_available_snapshots/attempt=1.log`.
 - Use `docker compose logs web` to inspect Flask startup failures.
 - Use `docker compose logs airflow-scheduler` to inspect DAG scheduling failures.
 
