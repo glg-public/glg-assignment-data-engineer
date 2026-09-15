@@ -1,0 +1,29 @@
+GLG Data Engineer Case Study Evaluation License
+
+Copyright (c) 2026 Gerson Lehrman Group, Inc. All rights reserved.
+
+Permission is granted to a candidate invited by Gerson Lehrman Group, Inc.
+("GLG") to access, copy, run, inspect, and modify this software locally solely
+for completing and discussing GLG's Data Engineer candidate evaluation.
+
+This permission does not allow you to:
+
+1. publish, distribute, sublicense, sell, or otherwise provide the software,
+   your modifications, or a solution to any other person;
+2. make the software or a solution publicly accessible, including in a public
+   source-control repository;
+3. use the software or your modifications in production, for commercial
+   purposes, or for any purpose unrelated to the GLG candidate evaluation; or
+4. remove or alter this license or any copyright notice.
+
+All permissions end when the candidate evaluation process ends. On request,
+you must delete all copies of the software and your modifications.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. TO THE MAXIMUM EXTENT
+PERMITTED BY LAW, GLG WILL NOT BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+LIABILITY ARISING FROM THE SOFTWARE OR ITS USE.
+
+Any use not expressly permitted by this license is prohibited. GLG reserves
+all other rights.

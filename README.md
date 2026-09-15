@@ -2,6 +2,8 @@
 
 This repository contains a small data application used for a Data Operations Engineer take-home exercise.
 
+This repository is provided under the [GLG Data Engineer Case Study Evaluation License](LICENSE) for local candidate-evaluation use only.
+
 ## What The Application Does
 
 A fictional vendor periodically provides a complete **Snapshot** of its professional-profile data as a dated CSV. The pipeline validates and retains the source rows, models the current profile state in PostgreSQL, and publishes the results through a Flask web application.
