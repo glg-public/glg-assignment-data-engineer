@@ -43,6 +43,14 @@ You may rewrite SQL, add indexes, or alter the schema. Use PostgreSQL's executio
 
 Use the deterministic larger dataset described in `README.md` for query-plan analysis.
 
+Optional diagnostic hint: run PostgreSQL directly through Docker to inspect indexes and the execution plan. Replace or refine this query as needed:
+
+```console
+docker compose exec -T postgres psql -U case_study -d profile_data -c "ANALYZE mart.current_profile; SELECT indexname FROM pg_indexes WHERE schemaname = 'mart' AND tablename = 'current_profile'; EXPLAIN (ANALYZE, BUFFERS) SELECT profile_id, full_name, company_name, job_title, department FROM mart.current_profile WHERE is_active AND ('Specialist' = '' OR full_name ILIKE '%Specialist%' OR company_name ILIKE '%Specialist%' OR job_title ILIKE '%Specialist%' OR department ILIKE '%Specialist%') ORDER BY full_name, profile_id;"
+```
+
+This shows how to inspect the current plan; it does not prescribe the optimization.
+
 ### 4. Preserve Profile History
 
 Evolve the current-state model into an SCD Type 2 profile-history model.
