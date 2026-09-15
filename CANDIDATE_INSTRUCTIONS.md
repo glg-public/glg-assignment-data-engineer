@@ -14,7 +14,7 @@ Suggested order: start the stack and inspect logs; repair the current-run defect
 
 ### 1. Repair Known Defects
 
-Diagnose and repair these four observed problems. The starting points identify where to begin investigating, not the cause or required fix.
+Diagnose and repair these five observed problems. The starting points identify where to begin investigating, not the cause or required fix.
 
 | Observed problem | Investigation starting point |
 |---|---|
