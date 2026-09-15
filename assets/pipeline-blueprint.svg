@@ -156,7 +156,7 @@
     <text x="58" y="71" class="sans detail">enhancement area</text>
     <circle cx="34" cy="105" r="14" class="defect"/>
     <text x="34" y="105" class="sans defect-text">!</text>
-    <text x="58" y="102" class="sans detail">four known defects</text>
+    <text x="58" y="102" class="sans detail">five known defects</text>
     <text x="58" y="119" class="mono tiny">locations not marked</text>
     <path d="M22 151h34" class="line" marker-end="none"/>
     <text x="66" y="156" class="sans detail">data / control flow</text>

@@ -18,6 +18,7 @@ Diagnose and repair these four observed problems. The starting points identify w
 
 | Observed problem | Investigation starting point |
 |---|---|
+| The Flask application is not available at the documented address after the stack starts. | Application configuration in `.env` |
 | A profile explicitly marked inactive can remain in current-profile results and company headcount. | CSV parsing and current-profile loading |
 | Rerunning an already completed Snapshot can fail instead of completing safely. | Ingestion status and rerun handling |
 | Company headcount can exceed the number of current active profiles belonging to that company. | `mart.company_headcount` SQL and join grain |
