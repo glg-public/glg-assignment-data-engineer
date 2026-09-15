@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 @dag(
     dag_id="profile_snapshot",
-    schedule="0 2 * * *",
+    schedule=None,
     start_date=datetime(2026, 1, 1),
     catchup=False,
     max_active_runs=1,

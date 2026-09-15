@@ -8,7 +8,7 @@ Your assignment is to implement the Requested Changes below.
 
 The repository may not initially behave exactly as documented. Use service and Airflow task logs when startup or output is unexpected.
 
-Suggested order: start the stack and inspect logs; repair the current-run defects; make Snapshot processing handle all files; then work on search, history, and UI changes. Partial completion is expected.
+Suggested order: start the stack and inspect logs; fix the Flask address and rerun-safety problems; make Snapshot processing handle all files; then investigate the inactive-profile and headcount results before working on search, history, and UI changes. Partial completion is expected.
 
 ## Requested Changes
 
@@ -19,9 +19,12 @@ Diagnose and repair these four observed problems. The starting points identify w
 | Observed problem | Investigation starting point |
 |---|---|
 | The Flask application is not available at the documented address after the stack starts. | Application configuration in `.env` |
-| A profile explicitly marked inactive can remain in current-profile results and company headcount. | CSV parsing and current-profile loading |
 | Rerunning an already completed Snapshot can fail instead of completing safely. | Ingestion status and rerun handling |
+| A profile explicitly marked inactive can remain in current-profile results and company headcount. | CSV parsing and current-profile loading |
 | Company headcount can exceed the number of current active profiles belonging to that company. | `mart.company_headcount` SQL and join grain |
+
+Fix rerun safety before testing the all-Snapshot processing change; otherwise the already completed first Snapshot can prevent later files from being reached.
+
 Fix the underlying causes rather than suppressing symptoms or removing validation.
 
 ### 2. Process Available Snapshots

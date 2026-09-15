@@ -88,6 +88,8 @@ The Baseline DAG processes `profiles_2026-01-15.csv`.
 5. Trigger a run using the play button.
 6. Open the task instance to inspect its logs and result.
 
+The DAG is manual-only for this exercise; it will not create a scheduled run when you unpause it.
+
 ## 4. Inspect The Results
 
 The Flask application provides:
