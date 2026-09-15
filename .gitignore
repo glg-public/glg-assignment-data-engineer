@@ -3,3 +3,6 @@ __pycache__/
 *.py[cod]
 airflow-logs/
 .worktrees/
+.DS_Store
+.scratch/*
+!.scratch/.keep
