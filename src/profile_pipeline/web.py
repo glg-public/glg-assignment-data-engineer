@@ -70,9 +70,13 @@ def create_app() -> Flask:
     def companies():
         rows = query(
             """
-            SELECT company_id, company_name, active_profiles
-            FROM mart.company_headcount
-            ORDER BY active_profiles DESC, company_name
+            SELECT cp.company_id, cp.company_name, count(*)::integer AS active_profiles
+            FROM mart.current_profile cp
+            JOIN raw.profile_snapshot raw
+              ON raw.company_id = cp.company_id
+            WHERE cp.is_active
+            GROUP BY cp.company_id, cp.company_name
+            ORDER BY active_profiles DESC, cp.company_name
             """
         )
         return render_template("companies.html", companies=rows)
