@@ -14,7 +14,7 @@ Suggested order: start the stack and inspect logs; repair the current-run defect
 
 ### 1. Repair Known Defects
 
-Diagnose and repair these five observed problems. The starting points identify where to begin investigating, not the cause or required fix.
+Diagnose and repair these four observed problems. The starting points identify where to begin investigating, not the cause or required fix.
 
 | Observed problem | Investigation starting point |
 |---|---|
@@ -22,8 +22,6 @@ Diagnose and repair these five observed problems. The starting points identify w
 | A profile explicitly marked inactive can remain in current-profile results and company headcount. | CSV parsing and current-profile loading |
 | Rerunning an already completed Snapshot can fail instead of completing safely. | Ingestion status and rerun handling |
 | Company headcount can exceed the number of current active profiles belonging to that company. | `mart.company_headcount` SQL and join grain |
-| Snapshot processing can report success even when a data-quality check reports invalid output. | Data-quality error handling |
-
 Fix the underlying causes rather than suppressing symptoms or removing validation.
 
 ### 2. Process Available Snapshots

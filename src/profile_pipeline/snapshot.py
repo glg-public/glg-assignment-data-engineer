@@ -220,23 +220,6 @@ def process_snapshot(path: Path) -> str:
                     raise ValueError("Active modeled profiles have empty role fields")
 
                 cursor.execute(
-                    "SELECT coalesce(sum(active_profiles), 0) FROM mart.company_headcount"
-                )
-                headcount_result = cursor.fetchone()
-                published_headcount = headcount_result[0] if headcount_result else 0
-                cursor.execute(
-                    "SELECT count(*) FROM mart.current_profile WHERE is_active"
-                )
-                expected_result = cursor.fetchone()
-                expected_headcount = expected_result[0] if expected_result else 0
-                if published_headcount != expected_headcount:
-                    logger.error(
-                        "Data-quality check failed: published headcount=%s, expected=%s",
-                        published_headcount,
-                        expected_headcount,
-                    )
-
-                cursor.execute(
                     "SELECT count(*) FROM raw.profile_snapshot WHERE snapshot_date = %s",
                     (snapshot_date,),
                 )
