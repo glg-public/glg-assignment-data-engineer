@@ -17,16 +17,16 @@ def scalar(cursor):
 
 def test_snapshot_workflow(clean_database, first_snapshot):
     rows = read_snapshot(first_snapshot)
-    assert len(rows) == 20
+    assert len(rows) == 21
 
     process_snapshot(first_snapshot)
 
     with psycopg2.connect(database_url()) as connection:
         with connection.cursor() as cursor:
             cursor.execute("SELECT count(*) FROM raw.profile_snapshot")
-            assert scalar(cursor) == 20
+            assert scalar(cursor) == 21
             cursor.execute("SELECT count(*) FROM mart.current_profile")
-            assert scalar(cursor) == 20
+            assert scalar(cursor) == 21
 
 
 def test_available_snapshot_entrypoint(clean_database, snapshot_directory):
@@ -44,7 +44,7 @@ def test_snapshot_rerun_is_safe(clean_database, first_snapshot):
     with psycopg2.connect(database_url()) as connection:
         with connection.cursor() as cursor:
             cursor.execute("SELECT count(*) FROM raw.profile_snapshot")
-            assert scalar(cursor) == 20
+            assert scalar(cursor) == 21
 
 
 def test_published_data_is_visible(clean_database, first_snapshot):
