@@ -43,10 +43,36 @@ You may rewrite SQL, add indexes, or alter the schema. Use PostgreSQL's executio
 
 Use the deterministic larger dataset described in `README.md` for query-plan analysis.
 
-Optional diagnostic hint: run PostgreSQL directly through Docker to inspect indexes and the execution plan. Replace or refine this query as needed:
+Optional diagnostic hint: run PostgreSQL directly through Docker to compare query plans before and after your change. Run these commands from the repository root. `postgres` is the Compose service, `case_study` is the database user, and `profile_data` is the application database.
+
+Start an interactive PostgreSQL session:
 
 ```console
-docker compose exec -T postgres psql -U case_study -d profile_data -c "ANALYZE mart.current_profile; SELECT indexname FROM pg_indexes WHERE schemaname = 'mart' AND tablename = 'current_profile'; EXPLAIN (ANALYZE, BUFFERS) SELECT profile_id, full_name, company_name, job_title, department FROM mart.current_profile WHERE is_active AND ('Specialist' = '' OR full_name ILIKE '%Specialist%' OR company_name ILIKE '%Specialist%' OR job_title ILIKE '%Specialist%' OR department ILIKE '%Specialist%') ORDER BY full_name, profile_id;"
+docker compose exec postgres psql -U case_study -d profile_data
+```
+
+Then run SQL at the `profile_data=#` prompt:
+
+```sql
+ANALYZE mart.current_profile;
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT profile_id, full_name, company_name, job_title, department
+FROM mart.current_profile
+WHERE is_active
+  AND (
+    'Specialist' = ''
+    OR full_name ILIKE '%Specialist%'
+    OR company_name ILIKE '%Specialist%'
+    OR job_title ILIKE '%Specialist%'
+    OR department ILIKE '%Specialist%'
+  )
+ORDER BY full_name, profile_id;
+```
+
+Exit with `\q`. The same query can be run non-interactively with:
+
+```console
+docker compose exec -T postgres psql -U case_study -d profile_data -c "ANALYZE mart.current_profile; EXPLAIN (ANALYZE, BUFFERS) SELECT profile_id, full_name, company_name, job_title, department FROM mart.current_profile WHERE is_active AND ('Specialist' = '' OR full_name ILIKE '%Specialist%' OR company_name ILIKE '%Specialist%' OR job_title ILIKE '%Specialist%' OR department ILIKE '%Specialist%') ORDER BY full_name, profile_id;"
 ```
 
 This shows how to inspect the current plan; it does not prescribe the optimization.
