@@ -4,6 +4,15 @@ This repository contains a small data application used for a Data Operations Eng
 
 This repository is provided under the [GLG Data Engineer Case Study Evaluation License](LICENSE) for local candidate-evaluation use only.
 
+## Case Study Guidance
+
+<table>
+  <tr>
+    <td><strong>CASE STUDY GUIDANCE</strong></td>
+    <td><strong>Spend approximately 60-90 minutes.</strong><br><br>We do not expect every Requested Change to be completed. Prioritize as you see fit, be ready to explain your decisions, and do not spend time making the system production-ready.</td>
+  </tr>
+</table>
+
 ## What The Application Does
 
 A fictional vendor periodically provides a complete **Snapshot** of its professional-profile data as a dated CSV. The pipeline validates and retains the source rows, models the current profile state in PostgreSQL, and publishes the results through a Flask web application.
