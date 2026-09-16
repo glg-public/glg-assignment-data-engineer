@@ -87,6 +87,7 @@ Evolve the current-state model into an SCD Type 2 profile-history model.
 - A current version has `valid_to = NULL`.
 - Each active profile has exactly one current version; inactive profiles have none.
 - Keep `mart.current_profile` available as the current-state interface used by existing application pages.
+- Use the provided `mart.profile_history` table shell for the historical rows.
 
 Example: a change first seen in the `2026-02-01` Snapshot closes the old version with `valid_to = 2026-02-01` and starts the new version with `valid_from = 2026-02-01`.
 

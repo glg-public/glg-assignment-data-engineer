@@ -27,14 +27,32 @@ def test_snapshot_workflow(clean_database, first_snapshot):
             assert scalar(cursor) == 21
             cursor.execute("SELECT count(*) FROM mart.current_profile")
             assert scalar(cursor) == 21
+            cursor.execute("SELECT count(*) FROM mart.profile_history")
+            assert scalar(cursor) == 0
 
 
 def test_available_snapshot_entrypoint(clean_database, snapshot_directory):
-    assert list(process_available_snapshots(snapshot_directory)) == [
+    results = process_available_snapshots(snapshot_directory)
+
+    assert list(results) == [
         "profiles_2026-01-15.csv",
         "profiles_2026-02-01.csv",
         "profiles_2026-02-15.csv",
     ]
+    assert set(results.values()) == {"completed"}
+
+
+def test_available_snapshot_entrypoint_skips_completed_files(
+    clean_database, snapshot_directory
+):
+    assert set(process_available_snapshots(snapshot_directory).values()) == {"completed"}
+    results = process_available_snapshots(snapshot_directory)
+
+    assert results == {
+        "profiles_2026-01-15.csv": "skipped",
+        "profiles_2026-02-01.csv": "skipped",
+        "profiles_2026-02-15.csv": "skipped",
+    }
 
 
 def test_snapshot_rerun_is_safe(clean_database, first_snapshot):
