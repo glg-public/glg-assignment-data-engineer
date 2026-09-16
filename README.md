@@ -14,44 +14,7 @@ Later Snapshots can show that a profile has changed company, job title, or depar
 
 The baseline data model is summarized below. The relationship between `mart.current_profile` and `mart.profile_history` is logical rather than an enforced foreign key in the baseline schema.
 
-```mermaid
-erDiagram
-    RAW_PROFILE_SNAPSHOT {
-        date snapshot_date
-        string profile_id
-        string company
-        string title
-        string department
-        boolean is_active
-    }
-    OPS_SNAPSHOT_INGESTION {
-        date snapshot_date PK
-        string source_file
-        string status
-    }
-    MART_CURRENT_PROFILE {
-        string profile_id PK
-        string company
-        string title
-        string department
-        boolean is_active
-    }
-    MART_PROFILE_HISTORY {
-        string profile_id PK
-        datetime valid_from PK
-        datetime valid_to
-        boolean is_active
-    }
-    MART_COMPANY_HEADCOUNT {
-        string company
-        integer headcount
-    }
-
-    OPS_SNAPSHOT_INGESTION ||--o{ RAW_PROFILE_SNAPSHOT : records
-    RAW_PROFILE_SNAPSHOT }o--o| MART_CURRENT_PROFILE : derives
-    MART_CURRENT_PROFILE }o..o{ MART_PROFILE_HISTORY : "logical profile_id"
-    MART_CURRENT_PROFILE ||--o{ MART_COMPANY_HEADCOUNT : aggregates
-```
+[![GLG Data Engineer Case Study data model](assets/data-model.svg)](assets/data-model.svg)
 
 `mart.profile_history` is the intended Slowly Changing Dimension Type 2 model. Its `(profile_id, valid_from)` identity and `valid_to` boundaries preserve profile changes over time; candidates may choose how to enforce or represent these relationships as they evolve the model.
 
