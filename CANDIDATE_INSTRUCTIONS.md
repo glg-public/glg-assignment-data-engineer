@@ -39,11 +39,11 @@ Alter the DAG so one run discovers and processes all unprocessed dated Snapshot 
 
 Improve the current-profile search query used by `/profiles` without changing its results or ordering.
 
-You may rewrite SQL, add indexes, or alter the schema. Use PostgreSQL's execution plan to understand and demonstrate the improvement rather than relying only on elapsed time.
+You may rewrite SQL, add indexes, or alter the schema. Measure and demonstrate the improvement.
 
-Use the deterministic larger dataset described in `README.md` for query-plan analysis.
+Use the deterministic larger dataset described in `README.md`. For a repeatable comparison, profile a search for `Specialist` before and after your change.
 
-Optional diagnostic hint: run PostgreSQL directly through Docker to compare query plans before and after your change. Run these commands from the repository root. `postgres` is the Compose service, `case_study` is the database user, and `profile_data` is the application database.
+Optional diagnostic hint: run PostgreSQL directly through Docker to compare performance before and after your change. Run these commands from the repository root. `postgres` is the Compose service, `case_study` is the database user, and `profile_data` is the application database.
 
 Start an interactive PostgreSQL session:
 
@@ -51,11 +51,9 @@ Start an interactive PostgreSQL session:
 docker compose exec postgres psql -U case_study -d profile_data
 ```
 
-Then run SQL at the `profile_data=#` prompt:
+At the `profile_data=#` prompt, the following query provides a repeatable search workload to profile:
 
 ```sql
-ANALYZE mart.current_profile;
-EXPLAIN (ANALYZE, BUFFERS)
 SELECT profile_id, full_name, company_name, job_title, department
 FROM mart.current_profile
 WHERE is_active
@@ -69,13 +67,11 @@ WHERE is_active
 ORDER BY full_name, profile_id;
 ```
 
-Exit with `\q`. The same query can be run non-interactively with:
+Exit with `\q`. To run the query non-interactively, pass it to the same command with `-c`, for example:
 
 ```console
-docker compose exec -T postgres psql -U case_study -d profile_data -c "ANALYZE mart.current_profile; EXPLAIN (ANALYZE, BUFFERS) SELECT profile_id, full_name, company_name, job_title, department FROM mart.current_profile WHERE is_active AND ('Specialist' = '' OR full_name ILIKE '%Specialist%' OR company_name ILIKE '%Specialist%' OR job_title ILIKE '%Specialist%' OR department ILIKE '%Specialist%') ORDER BY full_name, profile_id;"
+docker compose exec -T postgres psql -U case_study -d profile_data -c "SELECT profile_id, full_name, company_name, job_title, department FROM mart.current_profile WHERE is_active AND ('Specialist' = '' OR full_name ILIKE '%Specialist%' OR company_name ILIKE '%Specialist%' OR job_title ILIKE '%Specialist%' OR department ILIKE '%Specialist%') ORDER BY full_name, profile_id;"
 ```
-
-This shows how to inspect the current plan; it does not prescribe the optimization.
 
 ### 4. Preserve Profile History
 
@@ -105,7 +101,7 @@ Inactive profiles should remain available through their history page even though
 
 ## Validation
 
-Run the checks documented in `README.md`. They provide useful feedback but are not exhaustive. Also inspect Airflow task status and logs, Flask output, database behavior on reruns, and PostgreSQL query plans.
+Run the checks documented in `README.md`. They provide useful feedback but are not exhaustive. Also inspect Airflow task status and logs, Flask output, database behavior on reruns, and profile-search performance.
 
 ## Scope
 
