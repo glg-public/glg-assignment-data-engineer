@@ -4,54 +4,86 @@ Read `README.md` first for the application overview, data semantics, setup, oper
 
 > **Case study guidance:** Spend approximately 60-90 minutes. We do not expect every Requested Change to be completed. Prioritize as you see fit and be ready to explain your decisions. Do not spend time making the system production-ready.
 
-Your assignment is to implement the Requested Changes below.
+Your assignment is to work through the seeded defects and implement as many of the required changes as time allows.
 
-The repository may not initially behave exactly as documented. Use service and Airflow task logs when startup or output is unexpected.
+- Start the stack and inspect the service and Airflow task logs.
+- Work through the items below in order where practical.
+- Partial completion is expected. Be ready to explain your decisions and unfinished work.
 
-Suggested order: start the stack and inspect logs; fix the Flask address and rerun-safety problems; make Snapshot processing handle all files; then investigate the inactive-profile and headcount results before working on search, history, and UI changes. Partial completion is expected.
+## Seeded Defects
 
-## Requested Changes
+Diagnose and repair these four known problems. The investigation starting points are clues, not necessarily the causes or the complete fixes.
 
-### 1. Repair Known Defects
+### SD1. Flask application address
 
-Diagnose and repair these four observed problems. The starting points identify where to begin investigating, not the cause or required fix.
+- **Problem:** The Flask application is not available at the documented address after the stack starts.
+- **Start investigating:** Application configuration in `.env`.
+- **Expected outcome:** Flask is available at the address documented in `README.md`.
 
-| Observed problem | Investigation starting point |
-|---|---|
-| The Flask application is not available at the documented address after the stack starts. | Application configuration in `.env` |
-| Rerunning an already completed Snapshot can fail instead of completing safely. | Ingestion status and rerun handling |
-| A profile explicitly marked inactive can remain in current-profile results and company headcount. | CSV parsing and current-profile loading |
-| Company headcount can exceed the number of current active profiles belonging to that company. | `mart.company_headcount` SQL and join grain |
+### SD2. Snapshot rerun safety
 
-Fix rerun safety before testing the all-Snapshot processing change; otherwise the already completed first Snapshot can prevent later files from being reached.
+- **Problem:** Rerunning an already completed Snapshot can fail instead of completing safely.
+- **Start investigating:** Ingestion status and rerun handling.
+- **Expected outcome:** A completed Snapshot can be encountered again without causing an unnecessary failure.
 
-Fix the underlying causes rather than suppressing symptoms or removing validation.
+### SD3. Inactive profiles in current results
 
-### 2. Process Available Snapshots
+- **Problem:** A profile explicitly marked inactive can remain in current-profile results and company headcount.
+- **Start investigating:** CSV parsing and current-profile loading.
+- **Expected outcome:** Explicitly inactive profiles are excluded from current-profile search and company headcount.
+
+### SD4. Company headcount grain
+
+- **Problem:** Company headcount can exceed the number of current active profiles belonging to that company.
+- **Start investigating:** `mart.company_headcount` SQL and join grain.
+- **Expected outcome:** Each company count represents its current active profiles without duplicate counting.
+
+### Defect guidance
+
+- Fix `SD2` before testing `RC1`; otherwise the already completed first Snapshot can prevent later files from being reached.
+- Fix the underlying causes rather than suppressing symptoms or removing validation.
+
+## Required Changes
+
+### RC1. Process all available Snapshots
 
 Alter the DAG so one run discovers and processes all unprocessed dated Snapshot files in chronological order.
 
-- Completed files must be skipped safely on later runs.
-- A failed file must remain retryable.
-- Files dated after a failed file must not be processed during that run.
+- Completed files are skipped safely on later runs.
+- A failed file remains retryable.
+- Files dated after a failed file are not processed during that run.
 
-### 3. Optimize Profile Search
+### RC2. Optimize profile search
 
 Improve the current-profile search query used by `/profiles` without changing its results or ordering.
 
-You may rewrite SQL, add indexes, or alter the schema. Measure and demonstrate the improvement.
+Complete the performance investigation in these steps:
 
-Use the deterministic larger dataset described in `README.md`. For a repeatable comparison, profile a search for `Specialist` before and after your change.
+1. **Load the performance test data.** From the repository root, run:
 
-Optional diagnostic hint: run PostgreSQL directly through Docker to compare performance before and after your change. Run these commands from the repository root. `postgres` is the Compose service, `case_study` is the database user, and `profile_data` is the application database.
+   ```console
+   docker compose run --rm generate-performance-data
+   ```
 
-Start an interactive PostgreSQL session:
+   This creates a deterministic larger current-profile dataset. Generated profile IDs start with `PERF-`. Running the command again replaces prior generated rows.
 
-```console
-docker compose exec postgres psql -U case_study -d profile_data
-```
+2. **Start PostgreSQL.** From the repository root, open an interactive PostgreSQL session:
 
-At the `profile_data=#` prompt, the following query provides a repeatable search workload to profile:
+   ```console
+   docker compose exec postgres psql -U case_study -d profile_data
+   ```
+
+   `postgres` is the Compose service, `case_study` is the database user, and `profile_data` is the application database.
+
+3. **Capture a baseline.** At the `profile_data=#` prompt, run the search query below before making changes. Capture the execution time and query plan.
+
+4. **Make the optimization.** You may rewrite SQL, add indexes, or alter the schema. Preserve the search results and ordering.
+
+5. **Run the same test after the change.** Use the same dataset and the same `Specialist` query. At the PostgreSQL prompt, run the search query again and capture the execution time and query plan using the same method as the baseline.
+
+6. **Demonstrate the improvement.** Compare the before-and-after measurements and be ready to explain what changed, why it improved the query, and any trade-offs.
+
+Use this search query for both comparisons:
 
 ```sql
 SELECT profile_id, full_name, company_name, job_title, department
@@ -67,13 +99,9 @@ WHERE is_active
 ORDER BY full_name, profile_id;
 ```
 
-Exit with `\q`. To run the query non-interactively, pass it to the same command with `-c`, for example:
+Exit the PostgreSQL session with `\q` when finished.
 
-```console
-docker compose exec -T postgres psql -U case_study -d profile_data -c "SELECT profile_id, full_name, company_name, job_title, department FROM mart.current_profile WHERE is_active AND ('Specialist' = '' OR full_name ILIKE '%Specialist%' OR company_name ILIKE '%Specialist%' OR job_title ILIKE '%Specialist%' OR department ILIKE '%Specialist%') ORDER BY full_name, profile_id;"
-```
-
-### 4. Preserve Profile History
+### RC3. Preserve profile history
 
 Evolve the current-state model into an SCD Type 2 profile-history model.
 
@@ -87,7 +115,7 @@ Evolve the current-state model into an SCD Type 2 profile-history model.
 
 Example: a change first seen in the `2026-02-01` Snapshot closes the old version with `valid_to = 2026-02-01` and starts the new version with `valid_from = 2026-02-01`.
 
-### 5. Show Profile History
+### RC4. Show profile history
 
 Add a profile detail page at `/profiles/<profile_id>` and link profile-search results to it.
 
@@ -101,7 +129,14 @@ Inactive profiles should remain available through their history page even though
 
 ## Validation
 
-Run the checks documented in `README.md`. They provide useful feedback but are not exhaustive. Also inspect Airflow task status and logs, Flask output, database behavior on reruns, and profile-search performance.
+Run the checks documented in `README.md`. They provide useful feedback but are not exhaustive.
+
+- Inspect Airflow task status and logs.
+- Inspect Flask output.
+- Test database behavior on reruns.
+- Verify behavior when processing multiple Snapshots, including a failed file.
+- Compare profile-search performance before and after the optimization.
+- Verify current-profile, headcount, and history behavior for active and inactive profiles.
 
 ## Scope
 
